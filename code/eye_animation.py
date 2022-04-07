@@ -21,10 +21,10 @@ def plot_animation():
 
     anim = FuncAnimation(fig, animate, frames=len(gazeX), interval=5, repeat=False)
     plt.show()
-
     # save
     f = r"./animate_func.gif"
     anim.save(f, fps=30)
+    plt.close()
 def plot_static():
     fig = plt.figure(figsize=(8,5))
     plt.xlim([-0.5,0.5])
