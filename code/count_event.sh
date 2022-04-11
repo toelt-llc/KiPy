@@ -1,0 +1,1 @@
+grep -n  "Trial #" ../files/Ball\ on\ Bar\ -\ Child\ -\ RIGHT\ -\ 11_59.csv | cut -f1 -d:
