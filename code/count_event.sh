@@ -1,3 +1,4 @@
+#!/bin/bash
 cp ../files/Ball\ on\ Bar\ -\ Child\ -\ RIGHT\ -\ 11_59.csv ball_copy.csv
 var=$(grep -n  "Trial #" ball_copy.csv | cut -f 1 -d:)
 array=("${var[@]}")
