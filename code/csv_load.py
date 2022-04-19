@@ -10,13 +10,13 @@ def extract_dataframes(file, offset=0, encode='utf_8'):
         for cnt, line in enumerate(infile):
             if "Trial #" in line:
                 trials.append(cnt)
-        trials.append(cnt)
+        trials.append(cnt + 17)
         #process = subprocess.Popen(["wc", "-l", EXERCISE])#, "copy.sh"])
     # Dataframes
     dfs = []
     for i, j in enumerate(trials[:-1]):
         dfs.append(pd.read_csv(file,encoding= 'utf8', sep=',', low_memory=False,
-                                skiprows = j-offset, nrows=trials[i+1]-trials[i]))
+                                skiprows = j-offset, nrows=trials[i+1]-trials[i] -17))
 
     return dfs
 
@@ -33,16 +33,20 @@ class Trial:
         self.kinematics = Kinematics(df).values
         #self.plot = self.plots()
 
-    def plots(self):
+    def plots(self,name="fig_default.png"):
         fig = plt.figure()
-        plt.plot(self.kinematics['right_x'],self.kinematics['right_y'],'ro', label='right')
+        floatx = [float(i) for i in self.kinematics['right_x']]
+        floaty = [float(i) for i in self.kinematics['right_y']]
+        plt.plot(floatx, floaty,'ro', label='right')
         #plt.plot(dataframe['Left: Hand position X'],dataframe['Left: Hand position Y'],'bo', label='left')
         #plt.plot(dataframe['Gaze_X'],dataframe['Gaze_Y'],'go', label='gaze')
+
         plt.legend()
-        plt.savefig("right_test.svg")
-        plt.close(fig)
+
+        plt.savefig(name)
         #plt.show()
-        #return fig 
+        #plt.close(fig)
+        return fig 
 
 class Event:
     def __init__(self) -> None:
