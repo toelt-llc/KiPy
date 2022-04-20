@@ -5,7 +5,9 @@ docs/Presentation/Lecture Trends in Neurorehabilitation_22.03.22.pptx
 docs/.DS_Store
 .DS_Store
 docs/.DS_Store
-*.csv
+files/*
+files/utf8
+!files/utf8/Object_Hit_-_[Child_-_practice]_-_RIGHT_-_12_02.csv
 
 ignore
 .DS_Store
