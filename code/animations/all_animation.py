@@ -3,7 +3,7 @@ import pandas as pd
 import matplotlib.pyplot as plt
 from matplotlib.animation import FuncAnimation
 
-results = pd.read_csv("../files/Object_Hit_-_[Child_-_practice]_-_RIGHT_-_12_02.csv",encoding= 'unicode_escape', sep=',',skiprows = 390, parse_dates=[0,1,2])
+results = pd.read_csv("../../files/Object_Hit_-_[Child_-_practice]_-_RIGHT_-_12_02.csv",encoding= 'unicode_escape', sep=',',skiprows = 390, parse_dates=[0,1,2])
 
 gazeX = results['Gaze_X']
 gazeY = results['Gaze_Y']
