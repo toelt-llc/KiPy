@@ -1,24 +1,7 @@
+from cProfile import label
 import pandas as pd
 import matplotlib.pyplot as plt
-
-def extract_dataframes(file, offset=0, encode='utf_8'):
-    """ TODO
-    """
-    # Line detection
-    trials = []
-    with open(file, encoding=encode) as infile:
-        for cnt, line in enumerate(infile):
-            if "Trial #" in line:
-                trials.append(cnt)
-        trials.append(cnt + 17)
-        #process = subprocess.Popen(["wc", "-l", EXERCISE])#, "copy.sh"])
-    # Dataframes
-    dfs = []
-    for i, j in enumerate(trials[:-1]):
-        dfs.append(pd.read_csv(file,encoding= 'utf8', sep=',', low_memory=False,
-                                skiprows = j-offset, nrows=trials[i+1]-trials[i] -17))
-
-    return dfs
+from matplotlib.animation import FuncAnimation
 
 class Trial:
     def __init__(self, df) -> None:
@@ -49,6 +32,23 @@ class Trial:
         else: plt.close(fig)
         return fig 
 
+    def animate(self, name="anim_default.avi", save=True, show=False):
+        fig, ax = plt.subplots()
+        def animate(i):
+            ax.plot(self.kinematics['right_x'][i],self.kinematics['right_y'][i],'ro', label='right')
+            ax.plot(self.kinematics['left_x'][i],self.kinematics['left_y'][i],'bo', label='left')
+            ax.plot(self.kinematics['gaze_x'][i],self.kinematics['gaze_y'][i],'go', label='gaze')
+            ax.set_xlim([-0.5,0.5])
+            ax.set_ylim([0,1])
+
+        plt.legend()
+        anim = FuncAnimation(fig, animate, interval=5, repeat=False, save_count=1500) #frames=int(len(gazeX)/4)
+        
+        if save: anim.save(name, fps=30)
+        if show: plt.show()
+        else: plt.close()
+
+
 class Events:
     def __init__(self, df) -> None:
         event_list = list(df[df['Event name'].notna()]['Event name'])
@@ -74,3 +74,23 @@ class Kinematics:
         self.values['left_x'] = list(df['Left: Hand position X'])
         self.values['left_y'] = list(df['Left: Hand position Y'])
         self.values['left_spd'] = list(df['Left: Hand speed'])
+
+
+def extract_dataframes(file, offset=0, encode='utf_8'):
+    """ TODO
+    """
+    # Line detection
+    trials = []
+    with open(file, encoding=encode) as infile:
+        for cnt, line in enumerate(infile):
+            if "Trial #" in line:
+                trials.append(cnt)
+        trials.append(cnt + 17)
+        #process = subprocess.Popen(["wc", "-l", EXERCISE])#, "copy.sh"])
+    # Dataframes
+    dfs = []
+    for i, j in enumerate(trials[:-1]):
+        dfs.append(pd.read_csv(file,encoding= 'utf8', sep=',', low_memory=False,
+                                skiprows = j-offset, nrows=trials[i+1]-trials[i] -17))
+
+    return dfs
