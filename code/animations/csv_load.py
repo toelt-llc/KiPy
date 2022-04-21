@@ -32,7 +32,8 @@ class Trial:
         else: plt.close(fig)
         return fig 
 
-    def animate(self, name="anim_default.mov", save=True, show=False):
+    def animate(self, name="anim_default.gif", save=True, show=False):
+        """ OUTDATED """
         fig, ax = plt.subplots()
         def animate(i):
             ax.plot(self.kinematics['right_x'][i],self.kinematics['right_y'][i],'ro', label='right')
@@ -42,7 +43,8 @@ class Trial:
             ax.set_ylim([0,1])
 
         plt.legend()
-        anim = FuncAnimation(fig, animate, interval=5, repeat=False, save_count=1500) #frames=int(len(gazeX)/4)
+        #if save_count not precised -> only 100 points in .save
+        anim = FuncAnimation(fig, animate, interval=5, repeat=False, save_count=1500) 
         
         if save: anim.save(name, fps=30)
         if show: plt.show()

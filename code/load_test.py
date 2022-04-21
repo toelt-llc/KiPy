@@ -1,3 +1,4 @@
+#!/usr/bin/env python3
 from csv_load import *
 import pandas as pd
 import matplotlib.pyplot as plt
@@ -31,6 +32,6 @@ for i in range(len(dfs)):
     #plt.show()         #Controls the plotting or not when running it, like plot=True
     # print(trial.events_cnt)
     # print(trial.events)
-    title = str(i) + EXERCISE[14:17] + "anim.avi"
-    print(trial.animate(title))
+    title = str(i) + EXERCISE[14:17] + "anim.gif"
+    print(trial.animate(title, save=False, show=True)) #Takes way too long! 
 

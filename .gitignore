@@ -1,14 +1,13 @@
-
+ignore
 docs/Presentation/firstyearevaluation_Crotti_16.03.22.pptx
 docs/Presentation/Gaze-tracker_KINARM.pptx
 docs/Presentation/Lecture Trends in Neurorehabilitation_22.03.22.pptx
 docs/.DS_Store
 .DS_Store
-docs/.DS_Store
+
 *.csv
 !files/utf8/Visually_Guided_Reaching*11_49.csv
 
-ignore
-.DS_Store
-code/__pycache__/csv_load.cpython-38.pyc
+code/__pycache__/
+code/animations/__pycache__
 .vscode/settings.json

@@ -57,7 +57,6 @@ def animate2(trial, save=True, plot=True):
     """ TODO
     """
     def init():
-
         for l in line:
             l.set_data([],[])
         return line, 
@@ -88,10 +87,10 @@ def animate2(trial, save=True, plot=True):
 
     fig, (ax1, ax2) = plt.subplots(1,2,figsize=(10,6))
     fig.suptitle(("Trial " + str(trial.name)))
-    line1, = ax1.plot([], [], lw=2, color='g')
+    line1, = ax1.plot([], [], lw=3, color='g')
     line2, = ax1.plot([], [], lw=2, color='r')
     line3, = ax1.plot([], [], lw=2, color='b')
-    line4, = ax2.plot([], [], lw=2, color='g', label='gaze')
+    line4, = ax2.plot([], [], lw=3, color='g', label='gaze')
     line5, = ax2.plot([], [], lw=2, color='r', label='right')
     line6, = ax2.plot([], [], lw=2, color='b', label='left')
     line = [line1, line2, line3, line4, line5, line6]

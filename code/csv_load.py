@@ -32,7 +32,7 @@ class Trial:
         else: plt.close(fig)
         return fig 
 
-    def animate(self, name="anim_default.avi", save=True, show=False):
+    def animate(self, name="anim_default.gif", save=True, show=False):
         fig, ax = plt.subplots()
         def animate(i):
             ax.plot(self.kinematics['right_x'][i],self.kinematics['right_y'][i],'ro', label='right')
