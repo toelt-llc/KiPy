@@ -74,6 +74,7 @@ class Kinematics:
         self.values['left_x'] = list(df['Left: Hand position X'])
         self.values['left_y'] = list(df['Left: Hand position Y'])
         self.values['left_spd'] = list(df['Left: Hand speed'])
+        self.values['frame'] = list(df['Frame #'])
 
 
 def extract_dataframes(file, offset=0, encode='utf_8'):
