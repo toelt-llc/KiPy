@@ -11,3 +11,6 @@ docs/.DS_Store
 code/__pycache__/
 code/animations/__pycache__
 .vscode/settings.json
+
+*.mp4
+code/animation2_1100.mp4

@@ -43,9 +43,10 @@ def animate(trial, save=True, plot=True):
         ax.set_ylim(0,1)
 
     plt.tight_layout()
-
-    ani = animation.FuncAnimation(fig, anim, init_func=init, interval=1, blit=False, repeat=False, save_count=sys.maxsize)
-    if save: ani.save('animation.mp4', fps=300)
+    def save_cb(current:int, total:int):
+        if current%100 == 0: print(f'Saving frame {current} of {total}')
+    ani = animation.FuncAnimation(fig, anim, init_func=init, interval=1, blit=False, repeat=False, save_count=trial.count)
+    if save: ani.save('animation1.mp4', fps=300, progress_callback=save_cb)
     if plot: plt.show()
 
 
@@ -103,7 +104,10 @@ def animate2(trial, save=True, plot=True):
     ani = animation.FuncAnimation(fig, anim, init_func=init, interval=1, blit=True, repeat=False, save_count=trial.count)
     writer = animation.FFMpegWriter(fps=1000, bitrate=3800)
 
-    if save: ani.save('animation2_1100.mp4', progress_callback = save_cb, writer=writer)
+    if save:
+        title = 'animation2_1100.mp4'
+        ani.save(title, progress_callback = save_cb, writer=writer)
+        print('Animation saved under :', title)
     if plot: plt.show()
 
     
