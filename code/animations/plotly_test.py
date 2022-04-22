@@ -34,15 +34,18 @@ fig = go.Figure(
                      line=dict(width=2, color="blue")),
           go.Scatter(x=x, y=y,
                      mode="lines",
-                     line=dict(width=2, color="blue"))],
+                     line=dict(width=2, color="blue"),
+                     name ='Gaze history')],
     layout=go.Layout(
         xaxis=dict(range=[xm, xM], autorange=False, zeroline=False),
         yaxis=dict(range=[ym, yM], autorange=False, zeroline=False),
         title_text=practice_object, hovermode="closest",
+        legend_title='Time',
+        font=dict(family="Lato", size=18),#, color="DarkGrey"),
         updatemenus=[dict(type="buttons",
                           buttons=[dict(label="Play", method="animate",
                                         args=[None, {"frame": {"duration": 50, 
-                                                                "redraw": False},
+                                                                "redraw": True},
                                                                 "fromcurrent": True, 
                                                                 "transition": {"duration":0 }}])])]),
     frames=[go.Frame(
@@ -52,10 +55,20 @@ fig = go.Figure(
             mode="markers+text",
             marker=dict(color="red", size=20),
             name=t[k],
-            text=t[k],
-            ids=t)])
-            
+            text=t[k])])
+
         for k in range(0,int(trial.count),N)]
 )
 
+# fig.update_layout(
+#     title="Plot Title",
+#     xaxis_title="X Axis Title",
+#     yaxis_title="Y Axis Title",
+#     legend_title="Legend Title",
+#     font=dict(
+#         family="Courier New, monospace",
+#         size=18,
+#         color="RebeccaPurple"
+#     )
+#)
 fig.show()
