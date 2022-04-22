@@ -1,11 +1,7 @@
 from csv_load import *
 from matplotlib import pyplot as plt
 from matplotlib import animation
-
-# practice_object = "../../files/utf8/Object_Hit_-_[Child_-_practice]_-_RIGHT_-_12_02.csv"
-# ball = "../../files/utf8/Ball_on_Bar_-_Child_-_RIGHT_-_11_59.csv"
-# dfs = extract_dataframes(ball, offset=6)#3
-# trial = Trial(dfs[2])
+import sys
 
 def animate(trial, save=True, plot=True):
     """
@@ -46,11 +42,11 @@ def animate(trial, save=True, plot=True):
         ax.set_xlim(-0.4,0.4)
         ax.set_ylim(0,1)
 
-
-    ani = animation.FuncAnimation(fig, anim, init_func=init, interval=1, blit=False, repeat=False, save_count=200)
-    #ani.save('animation.gif', fps=200)
     plt.tight_layout()
-    plt.show()
+
+    ani = animation.FuncAnimation(fig, anim, init_func=init, interval=1, blit=False, repeat=False, save_count=sys.maxsize)
+    if save: ani.save('animation.mp4', fps=300)
+    if plot: plt.show()
 
 
 def animate2(trial, save=True, plot=True):
@@ -59,7 +55,7 @@ def animate2(trial, save=True, plot=True):
     def init():
         for l in line:
             l.set_data([],[])
-        return line, 
+        return line
 
     def anim(i):
         x = trial.kinematics['gaze_x']
@@ -87,22 +83,30 @@ def animate2(trial, save=True, plot=True):
 
     fig, (ax1, ax2) = plt.subplots(1,2,figsize=(10,6))
     fig.suptitle(("Trial " + str(trial.name)))
-    line1, = ax1.plot([], [], lw=3, color='g')
-    line2, = ax1.plot([], [], lw=2, color='r')
-    line3, = ax1.plot([], [], lw=2, color='b')
-    line4, = ax2.plot([], [], lw=3, color='g', label='gaze')
-    line5, = ax2.plot([], [], lw=2, color='r', label='right')
-    line6, = ax2.plot([], [], lw=2, color='b', label='left')
+    line1, = ax1.plot([], [], lw=5, color='g')
+    line2, = ax1.plot([], [], lw=3, color='r')
+    line3, = ax1.plot([], [], lw=3, color='b')
+    line4, = ax2.plot([], [], lw=5, color='g', label='gaze')
+    line5, = ax2.plot([], [], lw=3, color='r', label='right')
+    line6, = ax2.plot([], [], lw=3, color='b', label='left')
     line = [line1, line2, line3, line4, line5, line6]
     for ax in [ax1, ax2]:
         ax.set_xlim(-0.4,0.4)
         ax.set_ylim(0,1)
 
-    ani = animation.FuncAnimation(fig, anim, init_func=init, interval=1, blit=False, repeat=False, save_count=200)
-    #ani.save('animation.gif', fps=200)
     plt.legend()
     plt.tight_layout()
-    plt.show()
+
+    def save_cb(current:int, total:int):
+        if current%100 == 0: print(f'Saving frame {current} of {total}')
+
+    ani = animation.FuncAnimation(fig, anim, init_func=init, interval=1, blit=True, repeat=False, save_count=trial.count)
+    writer = animation.FFMpegWriter(fps=1000, bitrate=3800)
+
+    if save: ani.save('animation2_1100.mp4', progress_callback = save_cb, writer=writer)
+    if plot: plt.show()
+
+    
 
 #animate2(trial)
 #animate(trial)
