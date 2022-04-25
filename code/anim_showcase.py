@@ -2,7 +2,7 @@
 import sys
 sys.path.append('./animations/')
 from csv_load import *
-from anim import animate, animate2
+from anim import *
 
 reaching = "../files/utf8/Visually_Guided_Reaching_-_[Child_v2_-_practice]_-_LEFT_-_11_49.csv"
 #reaching2 = "../files/utf8/Visually_Guided_Reaching_-_Child_v2_(4_target)_-_LEFT_-_11_50.csv"
@@ -22,5 +22,7 @@ elif EXERCISE[14] == 'O' or 'R' :
 for i in range(len(dfs)):
     trial = Trial(dfs[i])
     print(i, trial.count, trial.duration, trial.rate)
-    animate(trial, save=True)
-    #animate2(trial, plot=False)
+    animate_gaze_single(trial, save=False)
+    #animate_gaze_triple(trial, save=False)
+    #animate2(trial, save=True)
+
