@@ -45,8 +45,8 @@ def animate(trial, save=True, plot=True):
     plt.tight_layout()
     def save_cb(current:int, total:int):
         if current%100 == 0: print(f'Saving frame {current} of {total}')
-    ani = animation.FuncAnimation(fig, anim, init_func=init, interval=1, blit=False, repeat=False, save_count=trial.count)
-    if save: ani.save('animation1.mp4', fps=300, progress_callback=save_cb)
+    ani = animation.FuncAnimation(fig, anim, init_func=init, interval=1, blit=False, repeat=False, save_count=trial.count/5)
+    if save: ani.save('./animations/animation2.gif', fps=300, progress_callback=save_cb)
     if plot: plt.show()
 
 
@@ -105,7 +105,7 @@ def animate2(trial, save=True, plot=True):
     writer = animation.FFMpegWriter(fps=1000, bitrate=3800)
 
     if save:
-        title = 'animation2_1100.mp4'
+        title = './animations/animation2_1100.mp4'
         ani.save(title, progress_callback = save_cb, writer=writer)
         print('Animation saved under :', title)
     if plot: plt.show()

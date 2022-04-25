@@ -22,5 +22,5 @@ elif EXERCISE[14] == 'O' or 'R' :
 for i in range(len(dfs)):
     trial = Trial(dfs[i])
     print(i, trial.count, trial.duration, trial.rate)
-    #animate(trial, save=False)
-    animate2(trial, plot=False)
+    animate(trial, save=True)
+    #animate2(trial, plot=False)
