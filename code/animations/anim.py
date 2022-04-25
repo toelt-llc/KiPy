@@ -78,7 +78,7 @@ def animate_gaze_triple(trial, save=True, plot=True):
     if plot: plt.show()
 
 
-def animate2(trial, save=True, plot=True, speed=1):
+def animate_all(trial, save=True, plot=True, speed=1):
     """ TODO
     """
     x = trial.kinematics['gaze_x']
@@ -93,20 +93,21 @@ def animate2(trial, save=True, plot=True, speed=1):
         return line
 
     def anim(i):
+        i = i*speed
         try:
-            line[0].set_data([x[2*i], x[2*i+10]], [y[2*i], y[2*i+10]])
-            line[1].set_data([x1[2*i], x1[2*i+10]], [y1[2*i], y1[2*i+10]])
-            line[2].set_data([x2[2*i], x2[2*i+10]], [y2[2*i], y2[2*i+10]])
+            line[0].set_data([x[i], x[i+10]], [y[i], y[i+10]])
+            line[1].set_data([x1[i], x1[i+10]], [y1[i], y1[i+10]])
+            line[2].set_data([x2[i], x2[i+10]], [y2[i], y2[i+10]])
         except:print("",end="")
-        if i%50== 0: 
-            #ax1.plot(x[:i], y[:i], color='b')
+        if i%100==0: #ax1.plot(x[:i], y[:i], color='b')
             try: 
-                ax1.title.set_text(("Frame : " + str(trial.kinematics['frame'][2*i])))
-                ax2.title.set_text(("Frame : " + str(trial.kinematics['frame'][2*i])))
+                ax1.title.set_text(("Frame : " + str(trial.kinematics['frame'][i])))
+                ax2.title.set_text(("Frame : " + str(trial.kinematics['frame'][i])))
             except: print("",end="")
-        line[3].set_data(x[:2*i],y[:2*i])
-        line[4].set_data(x1[:2*i],y1[:2*i])
-        line[5].set_data(x2[:2*i],y2[:2*i])
+        #ax1.title.set_text(("Time : " + str(round(trial.kinematics['frame_s'][i], 4))))
+        line[3].set_data(x[:i],y[:i])
+        line[4].set_data(x1[:i],y1[:i])
+        line[5].set_data(x2[:i],y2[:i])
         return line
 
     fig, (ax1, ax2) = plt.subplots(1,2,figsize=(10,6))
@@ -136,6 +137,12 @@ def animate2(trial, save=True, plot=True, speed=1):
         print('Animation saved under :', title)
     if plot: plt.show()
 
+def armspeed(trial):
+    plt.plot(trial.kinematics['frame_s'], trial.kinematics['right_spd'], label='right arm')
+    plt.plot(trial.kinematics['frame_s'], trial.kinematics['left_spd'], label='left arm')
+    plt.title('Arms speed')
+    plt.legend()
+    plt.show()
 
 
 def img_list(trial):

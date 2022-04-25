@@ -89,6 +89,9 @@ def extract_dataframes(file, offset=0, encode='utf_8'):
                 trials.append(cnt)
         trials.append(cnt + 17)
         #process = subprocess.Popen(["wc", "-l", EXERCISE])#, "copy.sh"])
+    
+    if file[14] == 'B': offset=6
+    elif file[14] == 'O' or 'R' : offset=3
     # Dataframes
     dfs = []
     for i, j in enumerate(trials[:-1]):
