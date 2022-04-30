@@ -16,8 +16,10 @@ dfs = extract_dataframes(EXERCISE)
 for i in range(len(dfs)):
     trial = Trial(dfs[i])
     print(i, trial.count, trial.duration, trial.rate)
+    #anim.armspeed(trial)
     #anim.animate_gaze_single(trial, save=False)
-    #animate_gaze_triple(trial, save=False)
-    #anim.animate2(trial, save=False, speed=5)
-    #trial.animate_gaze
-    anim.armspeed(trial)
+    #anim.animate_gaze_triple(trial, save=False)
+    #anim.animate_all(trial, save=False, plot=True, speed=4)
+
+
+#ffmpeg -i animation2_v3.mp4 -r 30 converted2.gif  
