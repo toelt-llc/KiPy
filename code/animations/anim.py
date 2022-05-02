@@ -2,28 +2,39 @@ from csv_load import *
 from matplotlib import pyplot as plt
 from matplotlib import animation
 from time import sleep
+from alive_progress import alive_bar
 
-# Important note: when saving with mp4 , the save_count parameter if of main importance. 
-# It can be lowered to have shorter final animation time.
+# Important note: when saving with mp4 , the save_count parameter is of main importance. 
+# It can be lowered to have shorter final animation time. It is dependent of the saving speed: faster plots -> less points -> less save_count.  
 
 def save_cb(current:int, total:int):    
     """ Callback function to track progress during the saving process. """
     if current%100 == 0: print(f'Saving frame {current} of {total}')
 
-def animate_gaze_single(trial, save=True, plot=True):
+# def save_cb2(current:int, total:int):    
+#     """ Callback function to track progress during the saving process. """
+#     if current%100 == 0: 
+#         print(f'Saving frame {current} of {total}')
+#         with alive_bar(total) as bar:
+#         for current in range(total):
+#             print(bar.current())
+
+def animate_gaze_single(trial, save=True, plot=True, speed:int=1):
     """ Function to create a video animation from a trial, only for the gaze data.
         The animation represents the movements of the gaze and the progressive position history.
     """
+    x = trial.kinematics['gaze_x']
+    y = trial.kinematics['gaze_y']
+    
     def init():
         line[0].set_data([],[])
         return line, 
 
     def anim(i):
-        x = trial.kinematics['gaze_x']
-        y = trial.kinematics['gaze_y']
-        try: ax2.title.set_text(trial.kinematics['frame'][2*i])
+        i = i*speed
+        try: ax2.title.set_text(trial.kinematics['frame'][i])
         except: print("",end="")
-        line[0].set_data(x[:2*i],y[:2*i])
+        line[0].set_data(x[:i],y[:i])
         return line
 
     fig = plt.figure(figsize=(5,6))
@@ -35,11 +46,11 @@ def animate_gaze_single(trial, save=True, plot=True):
         ax.set_xlim(-0.4,0.4)
         ax.set_ylim(0,1)
     plt.tight_layout()
-    ani = animation.FuncAnimation(fig, anim, init_func=init, interval=1, blit=False, repeat=False, save_count=trial.count/2)
+    ani = animation.FuncAnimation(fig, anim, init_func=init, interval=1, blit=False, repeat=False, save_count=trial.count/speed)
     if save: ani.save('./animations/animation3_single.mp4', fps=100, progress_callback=save_cb)
     if plot: plt.show()
 
-def animate_gaze_triple(trial, save=True, plot=True):
+def animate_gaze_triple(trial, save=True, plot=True, speed:int=1):
     """ Function a video for a triple frame animation, similar to animate_gaze_single.
         1: gaze position 2: gaze position + history 3: full history.
     """
@@ -53,11 +64,13 @@ def animate_gaze_triple(trial, save=True, plot=True):
         return line, 
 
     def anim(i):
+        i = i*speed
         try : 
-            line[0].set_data([x[2*i], x[2*i+10]], [y[2*i], y[2*i+10]])
-            ax2.title.set_text(trial.kinematics['frame'][2*i])
+            line[0].set_data([x[i], x[i+10]], [y[i], y[i+10]])
+            ax1.title.set_text(trial.kinematics['frame_s'][i])
+            ax2.title.set_text(trial.kinematics['frame'][i])
         except: print("",end="")
-        line[1].set_data(x[:2*i],y[:2*i])
+        line[1].set_data(x[:i],y[:i])
         return line
 
     fig, (ax1, ax2, ax3) = plt.subplots(1,3, figsize=(15,6))
@@ -72,7 +85,7 @@ def animate_gaze_triple(trial, save=True, plot=True):
         ax.set_ylim(0,1)
 
     plt.tight_layout()
-    ani = animation.FuncAnimation(fig, anim, init_func=init, interval=1, blit=False, repeat=False, save_count=trial.count/2)
+    ani = animation.FuncAnimation(fig, anim, init_func=init, interval=1, blit=False, repeat=False, save_count=trial.count/speed)
     if save: ani.save('./animations/animation3_triple.mp4', fps=100, progress_callback=save_cb)
     if plot: plt.show()
 
@@ -130,7 +143,7 @@ def animate_all(trial, save=True, plot=True, speed:int=1):
     plt.tight_layout()
     ani = animation.FuncAnimation(fig, anim, init_func=init, interval=1, blit=False, repeat=False, save_count=trial.count/speed)
     if save:
-        title = './animations/animation2_s' + str(speed) + '.mp4'
+        title = './animations/animation3_all_s' + str(speed) + '.mp4'
         ani.save(title, progress_callback = save_cb, fps=100)
         print('Animation saved under :', title)
     if plot: plt.show()
