@@ -25,9 +25,14 @@ def animate_gaze_single(trial, save=True, plot=True, speed:int=1):
     """
     x = trial.kinematics['gaze_x']
     y = trial.kinematics['gaze_y']
+    try: 
+        bx = trial.kinematics['ball_x']
+        by = trial.kinematics['ball_y']
+    except: print("no balls",end="")
     
     def init():
         line[0].set_data([],[])
+        line[1].set_data([],[])
         return line, 
 
     def anim(i):
@@ -35,13 +40,16 @@ def animate_gaze_single(trial, save=True, plot=True, speed:int=1):
         try: ax2.title.set_text(trial.kinematics['frame'][i])
         except: print("",end="")
         line[0].set_data(x[:i],y[:i])
+        try: line[1].set_data(bx[:i],by[:i])
+        except: 'bx/by do not exist'
         return line
 
     fig = plt.figure(figsize=(5,6))
     fig.suptitle(("Trial " + str(trial.name) + " Gaze only"))
     ax2 = fig.add_subplot(111)
     line2, = ax2.plot([], [], lw=2)
-    line = [line2]
+    line3, = ax2.plot([], [], lw=3, color='r')
+    line = [line2, line3]
     for ax in [ax2]:
         ax.set_xlim(-0.4,0.4)
         ax.set_ylim(0,1)

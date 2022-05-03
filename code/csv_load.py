@@ -1,4 +1,4 @@
-from cProfile import label
+import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
 from matplotlib.animation import FuncAnimation
@@ -15,6 +15,9 @@ class Trial:
         self.fixations = Events(df).fixations
         self.blinks = Events(df).blinks
         self.events = {'saccades':self.saccades, 'fixations':self.fixations, 'blinks':self.blinks}
+        self.event_mean = {'saccades':stat(self.events['saccades']), 'fixations':stat(self.events['fixations']), 
+                             'blinks':stat(self.events['blinks'])}
+        self.event_list = Events(df).event_list
 
         self.kinematics = Kinematics(df).values
         #self.plot = self.plots()
@@ -52,17 +55,18 @@ class Trial:
 class Events:
     def __init__(self, df) -> None:
         event_list = list(df[df['Event name'].notna()]['Event name'])
+        self.event_list = event_list
         self.counts = {}
         self.counts['saccades'] = event_list.count('Gaze saccade start')
         self.counts['fixations'] = event_list.count('Gaze fixation start')
         self.counts['blinks'] = event_list.count('Gaze blink start')
         #self.counts['other'] = event_list.count('')
         df_event = df[df['Event name'].notna()]
-        self.saccades =  [tuple(x) for x in df_event.loc[df_event['Event name'] == 'Gaze saccade start'][['Frame #','Event time (s)']].values]
-        self.fixations = [tuple(x) for x in df_event.loc[df_event['Event name'] == 'Gaze fixation start'][['Frame #','Event time (s)']].values]
-        self.blinks =    [tuple(x) for x in df_event.loc[df_event['Event name'] == 'Gaze blink start'][['Frame #','Event time (s)']].values]
+        self.saccades =  [tuple(x) for x in df_event.loc[((df_event['Event name'] == 'Gaze saccade start') | (df_event['Event name'] == 'Gaze saccade end'))][['Frame #','Event time (s)']].values]
+        self.fixations = [tuple(x) for x in df_event.loc[((df_event['Event name'] == 'Gaze fixation start') | (df_event['Event name'] == 'Gaze fixation end'))][['Frame #','Event time (s)']].values]
+        self.blinks =    [tuple(x) for x in df_event.loc[((df_event['Event name'] == 'Gaze blink start') | (df_event['Event name'] == 'Gaze blink end'))][['Frame #','Event time (s)']].values]
 
-        
+
 class Kinematics:
     def __init__(self, df) -> None:
         self.values = {}
@@ -76,6 +80,10 @@ class Kinematics:
         self.values['left_spd'] = list(df['Left: Hand speed'])
         self.values['frame'] = list(df['Frame #'])
         self.values['frame_s'] = list(df['Frame time (s)'])
+        try: 
+            self.values['ball_x'] = list(df['x_ball_pos'])
+            self.values['ball_y'] = list(df['y_ball_pos'])
+        except: print('')
 
 
 def extract_dataframes(file, offset=0, encode='utf_8'):
@@ -99,3 +107,14 @@ def extract_dataframes(file, offset=0, encode='utf_8'):
                                 skiprows = j-offset, nrows=trials[i+1]-trials[i] -17))
 
     return dfs
+
+def stat(series):
+    """ Used to compute the mean/std duration of similar events, eg. mean duration of saccades"""
+    ## TODO: for max and min, can 
+    l = series
+    lst = []
+    for i in range(0, len(l)-1, 2):
+        lst.append(l[i+1][0] - l[i][0])
+    arr = np.array(lst)
+
+    return round(np.mean(arr),2), round(np.std(arr),2) 
