@@ -105,16 +105,14 @@ def extract_dataframes(file, offset=0, encode='utf_8'):
     for i, j in enumerate(trials[:-1]):
         dfs.append(pd.read_csv(file,encoding= 'utf8', sep=',', low_memory=False,
                                 skiprows = j-offset, nrows=trials[i+1]-trials[i] -17))
-
     return dfs
 
 def stat(series):
     """ Used to compute the mean/std duration of similar events, eg. mean duration of saccades"""
     ## TODO: for max and min, can 
-    l = series
     lst = []
-    for i in range(0, len(l)-1, 2):
-        lst.append(l[i+1][0] - l[i][0])
+    for i in range(0, len(series)-1, 2):
+        lst.append(series[i+1][1] - series[i][1])   # 0: duration in frames, 1: duration in seconds
     arr = np.array(lst)
 
     return round(np.mean(arr),2), round(np.std(arr),2) 
