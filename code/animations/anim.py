@@ -1,3 +1,4 @@
+import os
 from csv_load import *
 from matplotlib import pyplot as plt
 from matplotlib import animation
@@ -19,7 +20,7 @@ def save_cb(current:int, total:int):
 #         for current in range(total):
 #             print(bar.current())
 
-def animate_gaze_single(trial, save=True, plot=True, speed:int=1):
+def animate_gaze_single(trial, speed:int=1, plot=True, save=True, filename='animation3_single'):
     """ Function to create a video animation from a trial, only for the gaze data.
         The animation represents the movements of the gaze and the progressive position history.
     """
@@ -55,20 +56,30 @@ def animate_gaze_single(trial, save=True, plot=True, speed:int=1):
         ax.set_ylim(0,1)
     plt.tight_layout()
     ani = animation.FuncAnimation(fig, anim, init_func=init, interval=1, blit=False, repeat=False, save_count=trial.count/speed)
-    if save: ani.save('./animations/animation3_single.mp4', fps=100, progress_callback=save_cb)
+    if save:
+        path = './animations/' + filename + '.mp4'
+        if not os.path.isfile(path): ani.save(path, fps=100, progress_callback=save_cb)
+        else: print("File already exists.")
     if plot: plt.show()
 
-def animate_gaze_triple(trial, save=True, plot=True, speed:int=1):
+def animate_gaze_triple(trial, speed:int=1, plot=True, save=True, filename='animation3_triple'):
     """ Function a video for a triple frame animation, similar to animate_gaze_single.
         1: gaze position 2: gaze position + history 3: full history.
     """
     x = trial.kinematics['gaze_x']
     y = trial.kinematics['gaze_y']
+    try: 
+        bx = trial.kinematics['ball_x']
+        by = trial.kinematics['ball_y']
+    except: print("no balls",end="")
 
     def init():
         line[0].set_data([],[])
         line[1].set_data([],[])
         line[2].set_data([x],[y])
+        line[3].set_data([],[])     #ball line
+        line[4].set_data([],[])     #ball line
+        line[5].set_data([bx],[by])     #ball line
         return line, 
 
     def anim(i):
@@ -79,6 +90,10 @@ def animate_gaze_triple(trial, save=True, plot=True, speed:int=1):
             ax2.title.set_text(trial.kinematics['frame'][i])
         except: print("",end="")
         line[1].set_data(x[:i],y[:i])
+        try:    
+            line[3].set_data([bx[i], bx[i+10]], [by[i], by[i+10]])
+            line[4].set_data(bx[:i],by[:i])
+        except: 'bx/by do not exist'
         return line
 
     fig, (ax1, ax2, ax3) = plt.subplots(1,3, figsize=(15,6))
@@ -87,14 +102,20 @@ def animate_gaze_triple(trial, save=True, plot=True, speed:int=1):
     line1, = ax1.plot([], [], lw=2)
     line2, = ax2.plot([], [], lw=2)
     line3, = ax3.plot([], [], lw=2)
-    line = [line1, line2, line3]
+    line4, = ax1.plot([], [], lw=2)
+    line5, = ax2.plot([], [], lw=2)
+    line6, = ax3.plot([], [], lw=2)
+    line = [line1, line2, line3, line4, line5, line6]
     for ax in [ax1, ax2, ax3]:
         ax.set_xlim(-0.4,0.4)
         ax.set_ylim(0,1)
 
     plt.tight_layout()
     ani = animation.FuncAnimation(fig, anim, init_func=init, interval=1, blit=False, repeat=False, save_count=trial.count/speed)
-    if save: ani.save('./animations/animation3_triple.mp4', fps=100, progress_callback=save_cb)
+    if save:
+        path = './animations/' + filename + '.mp4'
+        if not os.path.isfile(path): ani.save(path, fps=100, progress_callback=save_cb)
+        else: print("File already exists.")
     if plot: plt.show()
 
 def animate_all(trial, save=True, plot=True, speed:int=1):
