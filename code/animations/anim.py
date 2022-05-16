@@ -2,7 +2,6 @@ import os
 from csv_load import *
 from matplotlib import pyplot as plt
 from matplotlib import animation
-from time import sleep
 from alive_progress import alive_bar
 
 # Important note: when saving with mp4 , the save_count parameter is of main importance. 
@@ -12,7 +11,8 @@ def save_cb(current:int, total:int):
     """ Callback function to track progress during the saving process. """
     if current%100 == 0: print(f'Saving frame {current} of {total}')
 
-# def save_cb2(current:int, total:int):    
+# def save_cb2(current:int, total:int): 
+#     WIP -> callback.py   
 #     """ Callback function to track progress during the saving process. """
 #     if current%100 == 0: 
 #         print(f'Saving frame {current} of {total}')
