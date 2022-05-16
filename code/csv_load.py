@@ -62,6 +62,7 @@ class Events:
         self.counts['blinks'] = event_list.count('Gaze blink start')
         #self.counts['other'] = event_list.count('')
         df_event = df[df['Event name'].notna()]
+        # Returns tuple with the Frame# and time at which start OR end happens, order is always start->end
         self.saccades =  [tuple(x) for x in df_event.loc[((df_event['Event name'] == 'Gaze saccade start') | (df_event['Event name'] == 'Gaze saccade end'))][['Frame #','Event time (s)']].values]
         self.fixations = [tuple(x) for x in df_event.loc[((df_event['Event name'] == 'Gaze fixation start') | (df_event['Event name'] == 'Gaze fixation end'))][['Frame #','Event time (s)']].values]
         self.blinks =    [tuple(x) for x in df_event.loc[((df_event['Event name'] == 'Gaze blink start') | (df_event['Event name'] == 'Gaze blink end'))][['Frame #','Event time (s)']].values]
@@ -89,15 +90,14 @@ class Kinematics:
 def extract_dataframes(file, offset=0, encode='utf_8'):
     """ TODO
     """
-    # Line detection
+    # Trial line detection
     trials = []
     with open(file, encoding=encode) as infile:
         for cnt, line in enumerate(infile):
             if "Trial #" in line:
                 trials.append(cnt)
         trials.append(cnt + 17)
-        #process = subprocess.Popen(["wc", "-l", EXERCISE])#, "copy.sh"])
-    
+        #process = subprocess.Popen(["wc", "-l", EXERCISE])#, "copy.sh"]) #-> compares the count with sh and py
     if file[14] == 'B': offset=6
     elif file[14] == 'O' or file[14] == 'V': offset=3
     # Dataframes
