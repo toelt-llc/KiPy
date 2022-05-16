@@ -68,52 +68,63 @@ def animate_gaze_triple(trial, speed:int=1, plot=True, save=True, filename='anim
     """
     x = trial.kinematics['gaze_x']
     y = trial.kinematics['gaze_y']
+    b=0
     try: 
         bx = trial.kinematics['ball_x']
         by = trial.kinematics['ball_y']
-    except: print("no balls",end="")
+        b=1
+    except: print("no ball data",end="")
+
+    #ax = fig.add_subplot(111)
+    #ax.set_ylabel('common ylabel')
 
     def init():
         line[0].set_data([],[])
         line[1].set_data([],[])
         line[2].set_data([x],[y])
-        line[3].set_data([],[])     #ball line
-        line[4].set_data([],[])     #ball line
-        line[5].set_data([bx],[by])     #ball line
+        try: 
+            line[3].set_data([],[])     #ball line
+            line[4].set_data([],[])     #ball line
+            line[5].set_data([bx],[by])     #ball line
+        except: print("",end="")
         return line, 
 
     def anim(i):
         i = i*speed
         try : 
             line[0].set_data([x[i], x[i+10]], [y[i], y[i+10]])
-            ax1.title.set_text(trial.kinematics['frame_s'][i])
-            ax2.title.set_text(trial.kinematics['frame'][i])
+            ax1.title.set_text(("Time(s): " + str(round(trial.kinematics['frame_s'][i],4))))
+            ax2.title.set_text(("Frame : " + str(trial.kinematics['frame'][i])))
         except: print("",end="")
         line[1].set_data(x[:i],y[:i])
         try:    
             line[3].set_data([bx[i], bx[i+10]], [by[i], by[i+10]])
             line[4].set_data(bx[:i],by[:i])
-        except: 'bx/by do not exist'
+        except: print("",end="")
         return line
 
     fig, (ax1, ax2, ax3) = plt.subplots(1,3, figsize=(15,6))
-    fig.suptitle(("Trial " + str(trial.name) + " Gaze only"))
-    ax3.title.set_text(len(trial.kinematics['frame']))
+    fig.suptitle(("Trial " + str(trial.name) + " Gaze only"))#. Speed: " + str(speed)))
+    ax3.title.set_text("Total frames: " + str(len(trial.kinematics['frame'])))
+    ax1.set_ylabel('Gaze Y position (m)')
+    ax1.set_xlabel('Gaze X position (m)'), ax2.set_xlabel('Gaze X position (m)'), ax3.set_xlabel('Gaze X position (m)')
     line1, = ax1.plot([], [], lw=2)
     line2, = ax2.plot([], [], lw=2)
-    line3, = ax3.plot([], [], lw=2)
+    line3, = ax3.plot([], [], lw=2, label = 'gaze')
     line4, = ax1.plot([], [], lw=2)
     line5, = ax2.plot([], [], lw=2)
-    line6, = ax3.plot([], [], lw=2)
+    if b == 1: line6, = ax3.plot([], [], lw=2, label = 'ball')
+    else: line6, = ax3.plot([], [], lw=2,)
     line = [line1, line2, line3, line4, line5, line6]
     for ax in [ax1, ax2, ax3]:
         ax.set_xlim(-0.4,0.4)
         ax.set_ylim(0,1)
 
+    plt.legend(title = 'Positions')
     plt.tight_layout()
     ani = animation.FuncAnimation(fig, anim, init_func=init, interval=1, blit=False, repeat=False, save_count=trial.count/speed)
     if save:
-        path = './animations/' + filename + '.mp4'
+        path = './animations/final/' + filename + '.mp4'
         if not os.path.isfile(path): ani.save(path, fps=100, progress_callback=save_cb)
         else: print("File already exists.")
     if plot: plt.show()
@@ -143,7 +154,7 @@ def animate_all(trial, save=True, plot=True, speed:int=1):
             line[0].set_data([x[i], x[i+10]], [y[i], y[i+10]])
             line[1].set_data([x1[i], x1[i+10]], [y1[i], y1[i+10]])
             line[2].set_data([x2[i], x2[i+10]], [y2[i], y2[i+10]])
-            ax1.title.set_text(("Time : " + str(trial.kinematics['frame_s'][i])))
+            ax1.title.set_text(("Time(s): " + str(round(trial.kinematics['frame_s'][i],4))))
             ax2.title.set_text(("Frame : " + str(trial.kinematics['frame'][i])))
         except:print("",end="")
         #if i%100==0: #ax1.plot(x[:i], y[:i], color='b')
@@ -153,22 +164,24 @@ def animate_all(trial, save=True, plot=True, speed:int=1):
         return line
 
     fig, (ax1, ax2, ax3) = plt.subplots(1,3,figsize=(15,6))
-    fig.suptitle(("Trial " + str(trial.name) + " speed: " + str(speed)))
-    ax3.title.set_text(len(trial.kinematics['frame']))
+    fig.suptitle(("Trial " + str(trial.name)))# + " speed: " + str(speed)))
+    ax3.title.set_text("Total frames: " + str(len(trial.kinematics['frame'])))
+    ax1.set_ylabel('Gaze Y position (m)')
+    ax1.set_xlabel('Gaze X position (m)'), ax2.set_xlabel('Gaze X position (m)'), ax3.set_xlabel('Gaze X position (m)')
     line1, = ax1.plot([], [], lw=5, color='g')
     line2, = ax1.plot([], [], lw=3, color='r')
     line3, = ax1.plot([], [], lw=3, color='b')
     line4, = ax2.plot([], [], lw=5, color='g', label='gaze')
-    line5, = ax2.plot([], [], lw=3, color='r', label='right')
+    line5, = ax2.plot([], [], lw=3, color='r', label='right hand')
     line6, = ax2.plot([], [], lw=3, color='b', label='left')
     line7, = ax3.plot([], [], lw=5, color='g', label='gaze')
-    line8, = ax3.plot([], [], lw=3, color='r', label='right')
-    line9, = ax3.plot([], [], lw=3, color='b', label='left')
+    line8, = ax3.plot([], [], lw=3, color='r', label='right hand')
+    line9, = ax3.plot([], [], lw=3, color='b', label='left hand')
     line = [line1, line2, line3, line4, line5, line6]
     for ax in [ax1, ax2, ax3]:
         ax.set_xlim(-0.4,0.4)
         ax.set_ylim(0,1)
-    plt.legend()
+    plt.legend(title = 'Positions')
     plt.tight_layout()
     ani = animation.FuncAnimation(fig, anim, init_func=init, interval=1, blit=False, repeat=False, save_count=trial.count/speed)
     if save:
