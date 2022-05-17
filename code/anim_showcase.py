@@ -17,10 +17,10 @@ for i in range(1):
     trial = Trial(dfs[i])
     #print(trial.events)
     print(i, trial.count, trial.duration, trial.rate)
-    print(trial.event_mean)
+    print(trial.events)
     #anim.armspeed(trial)
     #anim.animate_gaze_single(trial, plot=True, save=False, speed=10, filename=('ball_single'+str(i)))
-    anim.animate_gaze_triple(trial, plot=True, save=False, speed=20, filename=('balltriple_s'+str(i)))
+    #anim.animate_gaze_triple(trial, plot=True, save=False, speed=20, filename=('balltriple_s'+str(i)))
     #anim.animate_all(trial, save=True, plot=False, speed=2)
 
 

@@ -112,7 +112,7 @@ def stat(series):
     ## TODO: for max and min, can 
     lst = []
     for i in range(0, len(series)-1, 2):
-        lst.append(series[i+1][1] - series[i][1])   # 0: duration in frames, 1: duration in seconds
+        lst.append(series[i+1][0] - series[i][0])   # 0: duration in frames, 1: duration in seconds
     arr = np.array(lst)
 
     return round(np.mean(arr),2), round(np.std(arr),2) 
