@@ -1,13 +1,14 @@
 #!/bin/bash
 cd ../files/
-mkdir utf8
-for f in *; do
+mkdir -p ../files/utf8_2
+for f in ../files/set2/*; do
+    #mv "$f" "${f// /_}" #remove spaces
     ENCODE=$(file  $f | awk '{print $2}')
     echo $f
     if [ $ENCODE ==  "ISO-8859" ];then
-        iconv -f ISO-8859-10 -t UTF-8  $f > ./utf8/$f
+        iconv -f ISO-8859-10 -t UTF-8  $f > ../files/utf8_2${f:13}
     elif [ $ENCODE ==  "Unicode" ];then
-        cp $f ./utf8/$f
+        cp $f ./utf8_2/$f
     fi
 done
 
