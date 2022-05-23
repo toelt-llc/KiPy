@@ -87,7 +87,7 @@ class Kinematics:
         except: print('')
 
 
-def extract_dataframes(file, offset=0, encode='utf_8'):
+def extract_dataframes(file, offset=0, encode='utf_8', set=1):
     """ TODO
     """
     # Trial line detection
@@ -98,8 +98,12 @@ def extract_dataframes(file, offset=0, encode='utf_8'):
                 trials.append(cnt)
         trials.append(cnt + 17)
         #process = subprocess.Popen(["wc", "-l", EXERCISE])#, "copy.sh"]) #-> compares the count with sh and py
-    if file[14] == 'B': offset=6
-    elif file[14] == 'O' or file[14] == 'V': offset=3
+    if set == 1: 
+        if file[14] == 'B': offset=6
+        elif file[14] == 'O' or file[14] == 'V': offset=3
+    else:
+        if file[16] == 'B': offset=6
+        elif file[16] == 'O' or file[14] == 'V': offset=3
     # Dataframes
     dfs = []
     for i, j in enumerate(trials[:-1]):
