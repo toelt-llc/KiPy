@@ -103,7 +103,7 @@ def animate_gaze_single_medfilt(trial, speed:int=1, filter=3, plot=True, save=Tr
     ax1.text(0.96, 0.98,'Time (s)', ha='right', va='top',transform=ax1.transAxes)
     ax1.set_ylabel('Gaze Y position (m)')
     ax1.set_xlabel('Gaze X position (m)'), ax2.set_xlabel('Gaze X position (m)')
-    ax1.title.set_text("Original"), ax2.title.set_text("Filtered: " + str(filter))
+    ax1.title.set_text("Original"), ax2.title.set_text("Filtered: " + str(filter) + " (ms) median")
     line1, = ax1.plot([], [], lw=2)
     line3, = ax2.plot([], [], lw=2, label='gaze')
     if b == 1: 
@@ -122,6 +122,48 @@ def animate_gaze_single_medfilt(trial, speed:int=1, filter=3, plot=True, save=Tr
     if save:
         path = './animations/' + filename + '.mp4'
         if not os.path.isfile(path): ani.save(path, fps=100, progress_callback=save_cb)
+        else: print("File already exists.")
+    if plot: plt.show()
+
+def static_gaze_single_medfilt(trial, filter=3, plot=True, save=True, filename=''):
+    """ Function to create a static image from a trial and apply the median filter, only for the gaze data.
+    """
+    x = trial.kinematics['gaze_x']
+    y = trial.kinematics['gaze_y']
+    x_med = median_filter(trial.kinematics['gaze_x'],filter)
+    y_med = median_filter(trial.kinematics['gaze_y'],filter)
+    b = 0
+    try: 
+        bx = trial.kinematics['ball_x']
+        by = trial.kinematics['ball_y']
+        b = 1
+    except: print("",end="")
+    
+    fig, (ax1, ax2) = plt.subplots(1,2, figsize=(10,6))
+    fig.suptitle(("Trial " + str(trial.num) + trial.name))
+    ax1.text(0.95, 0.95, round(trial.duration,2) , ha='right', va='top',transform=ax1.transAxes)
+    ax1.text(0.96, 0.98,'Time (s)', ha='right', va='top',transform=ax1.transAxes)
+    ax1.set_ylabel('Gaze Y position (m)')
+    ax1.set_xlabel('Gaze X position (m)'), ax2.set_xlabel('Gaze X position (m)')
+    ax1.title.set_text("Original"), ax2.title.set_text("Filtered: " + str(filter) + " (ms) median")
+    line1, = ax1.plot([], [], lw=2)
+    line2, = ax1.plot([], [], lw=3, color='r')
+    line3, = ax2.plot([], [], lw=2, label='gaze')
+    line4, = ax2.plot([], [], lw=3, color='r', label = 'ball')
+    if b == 1:
+        line2.set_data(bx,by)
+        line4.set_data(bx,by)
+    line1.set_data(x,y)
+    line3.set_data(x_med,y_med)
+    for ax in [ax1, ax2]:
+        ax.set_xlim(-0.5,0.5)
+        ax.set_ylim(-0.1,1)
+    plt.legend(title = 'Positions')
+    plt.tight_layout()
+
+    if save:
+        path = './images/' + filename + '.png'
+        if not os.path.isfile(path): plt.savefig(path, fps=100)#, progress_callback=save_cb)
         else: print("File already exists.")
     if plot: plt.show()
 

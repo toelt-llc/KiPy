@@ -18,7 +18,7 @@ for root, dir, files in os.walk(DIR, topdown=False):
         FILES.append(os.path.join(root, file))
 
 FILTERS = [90, 150, 500]
-for f in FILES[:9]:
+for f in FILES[:1]:
     filename = " " + f[16:]
     dfs = extract_dataframes(f, set=2)
     print(len(dfs), f)
@@ -26,7 +26,8 @@ for f in FILES[:9]:
         trial = Trial(dfs[i], filename)
         print(trial.duration)
         for s in FILTERS:
-            anim.animate_gaze_single_medfilt(trial, plot=False, save=True, filter=s, speed=10, filename=f[16:20]+str(s))
+            #anim.animate_gaze_single_medfilt(trial, plot=True, save=False, filter=s, speed=1, filename=f[16:21]+str(s))
+            anim.static_gaze_single_medfilt(trial, plot=False, save=True, filter=s,filename=f[16:21]+str(s))
     #plt.close()
 
 

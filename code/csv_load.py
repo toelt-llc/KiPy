@@ -81,7 +81,7 @@ class Kinematics:
         self.values['left_y'] = list(df['Left: Hand position Y'])
         self.values['left_spd'] = list(df['Left: Hand speed'])
         self.values['frame'] = list(df['Frame #'])
-        self.values['frame_s'] = [round(val,5) for val in list(df['Frame time (s)'])]
+        self.values['frame_s'] = [round(val,1) for val in list(df['Frame time (s)'])]
         try: 
             self.values['ball_x'] = list(df['x_ball_pos'])
             self.values['ball_y'] = list(df['y_ball_pos'])
