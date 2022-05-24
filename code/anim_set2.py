@@ -16,14 +16,18 @@ for root, dir, files in os.walk(DIR, topdown=False):
 #    print(os.path.abspath(os.getcwd()))
     for file in sorted(files):
         FILES.append(os.path.join(root, file))
-for f in (FILES):
+
+FILTERS = [90, 150, 500]
+for f in FILES[:9]:
+    filename = " " + f[16:]
     dfs = extract_dataframes(f, set=2)
     print(len(dfs), f)
     for i in range(len(dfs)):
-        trial = Trial(dfs[i])
+        trial = Trial(dfs[i], filename)
         print(trial.duration)
-        anim.animate_gaze_single(trial, plot=True, save=False, speed=30, filename=('ball_single'+str(i)))
-    plt.close()
+        for s in FILTERS:
+            anim.animate_gaze_single_medfilt(trial, plot=False, save=True, filter=s, speed=10, filename=f[16:20]+str(s))
+    #plt.close()
 
 
 print("Process finished -- %s seconds --" % round((time.time() - start_time),2))

@@ -4,8 +4,9 @@ import matplotlib.pyplot as plt
 from matplotlib.animation import FuncAnimation
 
 class Trial:
-    def __init__(self, df) -> None:
-        self.name = df.iloc[0][0]
+    def __init__(self, df, name) -> None:
+        self.name = name
+        self.num = df.iloc[0][0]
         self.rate = df.iloc[0][3]
         self.count = df.iloc[0][4]
         self.duration = df.iloc[-1][10]
@@ -80,7 +81,7 @@ class Kinematics:
         self.values['left_y'] = list(df['Left: Hand position Y'])
         self.values['left_spd'] = list(df['Left: Hand speed'])
         self.values['frame'] = list(df['Frame #'])
-        self.values['frame_s'] = list(df['Frame time (s)'])
+        self.values['frame_s'] = [round(val,5) for val in list(df['Frame time (s)'])]
         try: 
             self.values['ball_x'] = list(df['x_ball_pos'])
             self.values['ball_y'] = list(df['y_ball_pos'])
@@ -101,9 +102,9 @@ def extract_dataframes(file, offset=0, encode='utf_8', set=1):
     if set == 1: 
         if file[14] == 'B': offset=6
         elif file[14] == 'O' or file[14] == 'V': offset=3
-    else:
+    if set == 2:
         if file[16] == 'B': offset=6
-        elif file[16] == 'O' or file[14] == 'V': offset=3
+        elif file[16] == 'O' or file[16] == 'V': offset=3
     # Dataframes
     dfs = []
     for i, j in enumerate(trials[:-1]):

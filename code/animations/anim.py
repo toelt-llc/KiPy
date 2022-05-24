@@ -2,6 +2,7 @@ import os
 from csv_load import *
 from matplotlib import pyplot as plt
 from matplotlib import animation
+from scipy.ndimage import median_filter
 from alive_progress import alive_bar
 
 # Important note: when saving with mp4 , the save_count parameter is of main importance. 
@@ -29,7 +30,7 @@ def animate_gaze_single(trial, speed:int=1, plot=True, save=True, filename='anim
     try: 
         bx = trial.kinematics['ball_x']
         by = trial.kinematics['ball_y']
-    except: print("no balls",end="")
+    except: print("",end="")
     
     def init():
         line[0].set_data([],[])
@@ -38,7 +39,7 @@ def animate_gaze_single(trial, speed:int=1, plot=True, save=True, filename='anim
 
     def anim(i):
         i = i*speed
-        try: ax2.title.set_text(trial.kinematics['frame'][i])
+        try: ax2.title.set_text(trial.kinematics['frame_s'][i])
         except: print("",end="")
         line[0].set_data(x[:i],y[:i])
         try: line[1].set_data(bx[:i],by[:i])
@@ -52,8 +53,70 @@ def animate_gaze_single(trial, speed:int=1, plot=True, save=True, filename='anim
     line3, = ax2.plot([], [], lw=3, color='r')
     line = [line2, line3]
     for ax in [ax2]:
-        ax.set_xlim(-0.4,0.4)
-        ax.set_ylim(0,1)
+        ax.set_xlim(-0.5,0.5)
+        ax.set_ylim(-0.1,1)
+    plt.tight_layout()
+    ani = animation.FuncAnimation(fig, anim, init_func=init, interval=1, blit=False, repeat=False, save_count=trial.count/speed)
+    if save:
+        path = './animations/' + filename + '.mp4'
+        if not os.path.isfile(path): ani.save(path, fps=100, progress_callback=save_cb)
+        else: print("File already exists.")
+    if plot: plt.show()
+
+def animate_gaze_single_medfilt(trial, speed:int=1, filter=3, plot=True, save=True, filename=''):
+    """ Function to create a video animation from a trial, only for the gaze data.
+        The animation represents the movements of the gaze and the progressive position history.
+    """
+    x = trial.kinematics['gaze_x']
+    y = trial.kinematics['gaze_y']
+    x_med = median_filter(trial.kinematics['gaze_x'],filter)
+    y_med = median_filter(trial.kinematics['gaze_y'],filter)
+    b = 0
+    try: 
+        bx = trial.kinematics['ball_x']
+        by = trial.kinematics['ball_y']
+        b = 1
+    except: print("",end="")
+    
+    def init():
+        line[0].set_data([],[])
+        line[1].set_data([],[])
+        line[2].set_data([],[])
+        line[3].set_data([],[])
+        return line, 
+
+    def anim(i):
+        i = i*speed
+        try: time_text.set_text(trial.kinematics['frame_s'][i])
+        except: print("",end="")
+        line[0].set_data(x[:i],y[:i])
+        line[2].set_data(x_med[:i],y_med[:i])
+        try: 
+            line[1].set_data(bx[:i],by[:i])
+            line[3].set_data(bx[:i],by[:i])
+        except: 'bx/by do not exist'
+        return line, 
+
+    fig, (ax1, ax2) = plt.subplots(1,2, figsize=(10,6))
+    fig.suptitle(("Trial " + str(trial.num) + trial.name))
+    time_text = ax1.text(0.95, 0.95,'', ha='right', va='top',transform=ax1.transAxes)
+    ax1.text(0.96, 0.98,'Time (s)', ha='right', va='top',transform=ax1.transAxes)
+    ax1.set_ylabel('Gaze Y position (m)')
+    ax1.set_xlabel('Gaze X position (m)'), ax2.set_xlabel('Gaze X position (m)')
+    ax1.title.set_text("Original"), ax2.title.set_text("Filtered: " + str(filter))
+    line1, = ax1.plot([], [], lw=2)
+    line3, = ax2.plot([], [], lw=2, label='gaze')
+    if b == 1: 
+        line2, = ax1.plot([], [], lw=3, color='r')
+        line4, = ax2.plot([], [], lw=3, color='r', label = 'ball')
+    else: 
+        line2, = ax1.plot([], [])
+        line4, = ax2.plot([], [])
+    line = [line1, line2, line3, line4]
+    for ax in [ax1, ax2]:
+        ax.set_xlim(-0.5,0.5)
+        ax.set_ylim(-0.1,1)
+    plt.legend(title = 'Positions')
     plt.tight_layout()
     ani = animation.FuncAnimation(fig, anim, init_func=init, interval=1, blit=False, repeat=False, save_count=trial.count/speed)
     if save:
