@@ -4,6 +4,9 @@ from csv_load import *
 sys.path.append('./animations/')
 import anim
 
+# Script used to process the 'flickering data' and visualize the data.
+# The median filtering function is illustrated with the static and animation functions from the anim module
+
 start_time = time.time()
 
 #practice_object = "../files/utf8/Object_Hit_-_[Child_-_practice]_-_RIGHT_-_12_02.csv"

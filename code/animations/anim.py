@@ -5,6 +5,8 @@ from matplotlib import animation
 from scipy.ndimage import median_filter
 from alive_progress import alive_bar
 
+# Module containing the animations methods
+
 # Important note: when saving with mp4 , the save_count parameter is of main importance. 
 # It can be lowered to have shorter final animation time. It is dependent of the saving speed: faster plots -> less points -> less save_count.  
 

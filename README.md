@@ -4,8 +4,8 @@ Folder with the data processing from the project shared with KU Leuven.
 The projects assesses cerebral palsy and other possible brain damages in children aged 7 to 15, thanks to a non-invasive tool.  
 Objectives :  
 -1 Visual functions assessment.  
--2 Visual impact on manual control -> **task experiments**.  
--3 MRI data coupling: strucutral visualization.  
+-2 Visual impact on manual control -> from the **task experiments**.  
+-3 MRI data coupling: structural visualization.  
 
 *DATA* is extracted from the Kinarm software as CSV files. 4 different type of tasks are available. 
 
@@ -15,6 +15,7 @@ Objectives :
 Contains:
 - walkthrough (and experimental) notebooks & scripts.
 - **animations**, possible animations of gaze/hands data.  
+Example:  
 ![Animation example](https://github.com/toelt-llc/gaze-kuleuven/blob/main/code/animations/final/converted.gif) 
 - **bash_scripts**, pre-processing scripts used during csv exploration. 
 - **images**, possibles plots of gaze/hands data.

@@ -7,10 +7,16 @@ docs/.DS_Store
 
 *.csv
 !files/utf8/Visually_Guided_Reaching*11_49.csv
+!files/utf8_2/Visually_Guided_Reaching*LEFT*.csv
 
 code/__pycache__/
+code/load_test.py
 code/animations/__pycache__
 .vscode/settings.json
 
 *.mp4
 code/animation2_1100.mp4
+code/animations/callback.py
+!code/animations/Ball*.mp4
+
+code/animations/plotly_test*

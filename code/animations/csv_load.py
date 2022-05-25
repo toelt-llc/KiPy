@@ -3,12 +3,16 @@ import pandas as pd
 import matplotlib.pyplot as plt
 from matplotlib.animation import FuncAnimation
 
+# Trial module to automatically load the CSVs as dataframes and export the desired columns.
+# Future parameters will be added when needed for analysis.  
+
 class Trial:
-    def __init__(self, df) -> None:
-        self.name = df.iloc[0][0]
+    def __init__(self, df, name) -> None: 
+        self.name = name  # variable to keep track of the exercise 
+        self.num = df.iloc[0][0]
         self.rate = df.iloc[0][3]
         self.count = df.iloc[0][4]
-        self.duration = df.iloc[-1][10]
+        self.duration = round(df.iloc[-1][10],4)
 
         self.events_cnt = Events(df).counts
         self.saccades = Events(df).saccades
@@ -22,13 +26,15 @@ class Trial:
         self.kinematics = Kinematics(df).values
         #self.plot = self.plots()
 
-    def plot_movements(self,name="fig_default.png", save=True, show=False):
+    def plot_movements(self,name="fig_default.png", save=False, show=True):
         fig = plt.figure()
         plt.plot(self.kinematics['right_x'],self.kinematics['right_y'],'ro', label='right')
         plt.plot(self.kinematics['left_x'],self.kinematics['left_y'],'bo', label='left')
         plt.plot(self.kinematics['gaze_x'],self.kinematics['gaze_y'],'go', label='gaze')
+        plt.xlim([-0.5,0.5])
+        plt.ylim([0,1])
         plt.legend()
-        plt.title(self.duration)
+        plt.title("Summary plot. Duration : " + str(self.duration))
 
         if save: plt.savefig(name)
         if show: plt.show()
@@ -80,15 +86,15 @@ class Kinematics:
         self.values['left_y'] = list(df['Left: Hand position Y'])
         self.values['left_spd'] = list(df['Left: Hand speed'])
         self.values['frame'] = list(df['Frame #'])
-        self.values['frame_s'] = list(df['Frame time (s)'])
+        self.values['frame_s'] = [round(val,1) for val in list(df['Frame time (s)'])]
         try: 
             self.values['ball_x'] = list(df['x_ball_pos'])
             self.values['ball_y'] = list(df['y_ball_pos'])
         except: print('')
 
 
-def extract_dataframes(file, offset=0, encode='utf_8'):
-    """ TODO
+def extract_dataframes(file, offset=0, encode='utf_8', set=1):
+    """ Extracts the trials from the raw csv as dataframes. Outputs a list of pd dataframes. 
     """
     # Trial line detection
     trials = []
@@ -96,10 +102,15 @@ def extract_dataframes(file, offset=0, encode='utf_8'):
         for cnt, line in enumerate(infile):
             if "Trial #" in line:
                 trials.append(cnt)
-        trials.append(cnt + 17)
-        #process = subprocess.Popen(["wc", "-l", EXERCISE])#, "copy.sh"]) #-> compares the count with sh and py
-    if file[14] == 'B': offset=6
-    elif file[14] == 'O' or file[14] == 'V': offset=3
+        trials.append(cnt + 17)  #process = subprocess.Popen(["wc", "-l", EXERCISE])#, "copy.sh"]) #-> compares the count with sh and py
+    
+    # Since each exercise type has a different formatting norm the name of the files are used to differentiate
+    if set == 1: 
+        if file[14] == 'B': offset=6
+        elif file[14] == 'O' or file[14] == 'V': offset=3
+    if set == 2:
+        if file[16] == 'B': offset=6
+        elif file[16] == 'O' or file[16] == 'V': offset=3
     # Dataframes
     dfs = []
     for i, j in enumerate(trials[:-1]):
@@ -109,10 +120,10 @@ def extract_dataframes(file, offset=0, encode='utf_8'):
 
 def stat(series):
     """ Used to compute the mean/std duration of similar events, eg. mean duration of saccades"""
-    ## TODO: for max and min, can 
+    ## TODO: for max and min
     lst = []
     for i in range(0, len(series)-1, 2):
-        lst.append(series[i+1][1] - series[i][1])   # 0: duration in frames, 1: duration in seconds
+        lst.append(series[i+1][0] - series[i][0])   # 0: duration in frames, 1: duration in seconds
     arr = np.array(lst)
 
     return round(np.mean(arr),2), round(np.std(arr),2) 
