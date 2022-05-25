@@ -9,14 +9,13 @@ Objectives :
 
 *DATA* is extracted from the Kinarm software as CSV files. 4 different type of tasks are available. 
 
-![Whole anim](https://github.com/toelt-llc/gaze-kuleuven/blob/main/code/animations/final/converted2.gif) 
+![Whole anim](https://github.com/toelt-llc/gaze-kuleuven/blob/main/code/animations/final/convertedall.gif) 
 
 ## code
 Contains:
 - walkthrough (and experimental) notebooks & scripts.
 - **animations**, possible animations of gaze/hands data.  
-Example:  
-![Animation example](https://github.com/toelt-llc/gaze-kuleuven/blob/main/code/animations/final/converted.gif) 
+See example above.  
 - **bash_scripts**, pre-processing scripts used during csv exploration. 
 - **images**, possibles plots of gaze/hands data.
 ## docs
