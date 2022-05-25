@@ -38,8 +38,11 @@ Contains visualizations for differents parameters. Images are obtained from the 
 
 ### Executing programs
 
-* Running the [Notebook Walkthrough](https://github.com/toelt-llc/gaze-kuleuven/blob/main/code/nb_walkthrough.ipynb) helps to understand the steps involved, from the CSV files reading to the animations and extraction of parameters.    
-* Scripts step-by-step
+* Running the [Notebook Walkthrough](https://github.com/toelt-llc/gaze-kuleuven/blob/main/code/nb_walkthrough.ipynb) helps to understand the steps involved, from the CSV files reading to the animations and extraction of parameters.   
+
+* Running the animations script
 ```
-code blocks for commands
+python3 anim_showcase.py
 ```
+
+This script is made to be manually changed depending on what is needed, it is possible to plot or save the animations.  The lines are already written and can be uncommented. The *speed* parameter increases the speed for both display and saved versions.  

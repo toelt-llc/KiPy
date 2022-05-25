@@ -23,5 +23,5 @@ for i in range(1):
     #anim.animate_gaze_triple(trial, plot=True, save=False, speed=20, filename=('balltriple_s'+str(i)))
     #anim.animate_all(trial, save=True, plot=False, speed=2)
 
-
+# Command to convert the videos to gifs
 #ffmpeg -i animation2_v3.mp4 -r 30 converted2.gif  
