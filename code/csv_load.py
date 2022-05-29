@@ -3,10 +3,12 @@ import pandas as pd
 import matplotlib.pyplot as plt
 from matplotlib.animation import FuncAnimation
 
-# Trial module to automatically load the CSVs as dataframes and export the desired columns.
+# Trial module automatically loads the CSVs as dataframes and export the desired columns.
 # Future parameters will be added when needed for analysis.  
 
 class Trial:
+    """
+    """
     def __init__(self, df, name) -> None: 
         self.name = name  # variable to keep track of the exercise 
         self.num = df.iloc[0][0]
