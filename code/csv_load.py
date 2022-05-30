@@ -9,12 +9,13 @@ from matplotlib.animation import FuncAnimation
 class Trial:
     """
     """
-    def __init__(self, df, name) -> None: 
+    def __init__(self, df, name, filter) -> None: 
         self.name = name  # variable to keep track of the exercise 
         self.num = df.iloc[0][0]
         self.rate = df.iloc[0][3]
         self.count = df.iloc[0][4]
         self.duration = round(df.iloc[-1][10],4)
+        self.filter_size = filter
 
         self.events_cnt = Events(df).counts
         self.saccades = Events(df).saccades
@@ -25,7 +26,7 @@ class Trial:
                              'blinks':stat(self.events['blinks'])}
         self.event_list = Events(df).event_list
 
-        self.kinematics = Kinematics(df).values
+        self.kinematics = Kinematics(df, filter).values
         #self.plot = self.plots()
 
     def plot_movements(self,name="fig_default.png", save=False, show=True):
@@ -77,10 +78,12 @@ class Events:
 
 
 class Kinematics:
-    def __init__(self, df) -> None:
+    def __init__(self, df, filter) -> None:
         self.values = {}
         self.values['gaze_x'] = [float(i) for i in df['Gaze_X']]
         self.values['gaze_y'] = [float(i) for i in df['Gaze_Y']]
+        self.values['filtered_x'], _ = medfilt(df, filter)
+        _, self.values['filtered_y'] = medfilt(df, filter)
         self.values['right_x'] = list(df['Right: Hand position X'])
         self.values['right_y'] = list(df['Right: Hand position Y'])
         self.values['right_spd'] = list(df['Right: Hand speed'])
@@ -129,3 +132,17 @@ def stat(series):
     arr = np.array(lst)
 
     return round(np.mean(arr),2), round(np.std(arr),2) 
+
+def medfilt(df, f):
+            """ df: raw dataframe
+                f: filter size, in both directions
+            """
+            #newdf = pd.DataFrame()
+            arrx, arry = [], []
+            for i in range(len(df)):
+                arrx.append(np.nanmedian(df['Gaze_X'][i-f:i+f]))
+                arry.append(np.nanmedian(df['Gaze_Y'][i-f:i+f]))
+            # newdf['X filter'], newdf['Y filter'] = arrx, arry
+            # newdf['Frame time (s)'] = df['Frame time (s)']
+
+            return arrx, arry

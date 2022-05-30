@@ -20,18 +20,20 @@ for root, dir, files in os.walk(DIR, topdown=False):
     for file in sorted(files):
         FILES.append(os.path.join(root, file))
 
-FILTERS = [90, 150, 500]
-for f in FILES[:1]:
+FILTERS = [7, 14]
+for f in FILES:
     filename = " " + f[16:]
     dfs = extract_dataframes(f, set=2)
-    print(len(dfs), f)
+    print("Processing file : ", f), print("Trials: ", len(dfs))
     for i in range(len(dfs)):
-        trial = Trial(dfs[i], filename)
+        #for s in FILTERS:
+        trial = Trial(dfs[i], filename, 7)
         print(trial.duration)
-        for s in FILTERS:
-            #anim.animate_gaze_single_medfilt(trial, plot=True, save=False, filter=s, speed=1, filename=f[16:21]+str(s))
-            anim.static_gaze_single_medfilt(trial, plot=False, save=True, filter=s,filename=f[16:21]+str(s))
+        anim.animate_gaze_single_medfilt(trial, plot=False, save=True, speed=40, filename=f[16:21]+str(7))
+        anim.static_gaze_single_medfilt(trial, plot=False, save=True, filename=f[16:21]+str(7))
     #plt.close()
 
 
 print("Process finished -- %s seconds --" % round((time.time() - start_time),2))
+
+
