@@ -18,5 +18,6 @@ code/animations/__pycache__
 code/animation2_1100.mp4
 code/animations/callback.py
 !code/animations/Ball*.mp4
+!code/animations/newfilter/*
 
 code/animations/plotly_test*
