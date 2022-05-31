@@ -7,7 +7,7 @@ from matplotlib.animation import FuncAnimation
 # Future parameters will be added when needed for analysis.  
 
 class Trial:
-    """
+    """ doc
     """
     def __init__(self, df, name, filter) -> None: 
         self.name = name  # variable to keep track of the exercise 

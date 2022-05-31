@@ -31,9 +31,9 @@ Contains the modules to automatically extract the data columns for each trial, f
 
 **Directories**  
 -[Animations](https://github.com/toelt-llc/gaze-kuleuven/tree/main/code/animations):  
-Contains the animation modules and useful functions. Animations saved from the *anim_showcase* scripts are saved here.  
+Contains the animation modules and useful functions. Animations saved from the *anim_showcase* scripts are saved here in subfolders.  
 -[Images](https://github.com/toelt-llc/gaze-kuleuven/tree/main/code/images)  
-Contains visualizations for differents parameters. Images are obtained from the scripts.  
+Contains visualizations for differents parameters. Images are also obtained from the scripts.  
 
 
 ### Executing programs
@@ -42,7 +42,14 @@ Contains visualizations for differents parameters. Images are obtained from the 
 
 * Running the animations script
 ```
-python3 anim_showcase.py
+> python3 anim_showcase.py
+>
+> python3 anim_showcase2.py
 ```
 
-This script is made to be manually changed depending on what is needed, it is possible to plot or save the animations.  The lines are already written and can be uncommented. The *speed* parameter increases the speed for both display and saved versions.  
+This script is made to be manually changed depending on what is needed, it is possible to set it to plot or save the animations thanks to functions like the following:   
+``` 
+anim.animate_gaze_single(trial, plot=True, save=True, filename='[video_name]',speed = 10)
+```
+The *speed* parameter regulates the frame rate of the animation, and the total video length.    
+Lines 21 to 24 contain commented functions that can the user can run and modify to either plot or save (or both) animations and plots.  

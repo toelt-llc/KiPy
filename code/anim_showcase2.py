@@ -27,10 +27,10 @@ for f in FILES:
     print("Processing file : ", f), print("Trials: ", len(dfs))
     for i in range(len(dfs)):
         #for s in FILTERS:
-        trial = Trial(dfs[i], filename, 7)
+        trial = Trial(dfs[i], filename, 14)
         print(trial.duration)
-        anim.animate_gaze_single_medfilt(trial, plot=False, save=True, speed=40, filename=f[16:21]+str(7))
-        anim.static_gaze_single_medfilt(trial, plot=False, save=True, filename=f[16:21]+str(7))
+        anim.animate_gaze_single_medfilt(trial, plot=False, save=True, speed=40, filename=f[16:21]+str(14))
+        anim.static_gaze_single_medfilt(trial, plot=False, save=True, filename=f[16:21]+str(14))
     #plt.close()
 
 
