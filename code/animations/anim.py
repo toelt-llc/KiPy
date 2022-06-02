@@ -65,268 +65,6 @@ def animate_gaze_single(trial, speed:int=1, plot=True, save=True, filename='anim
         else: print("File already exists.")
     if plot: plt.show()
 
-def animate_gaze_single_medfilt(trial, speed:int=1, filter=3, plot=True, save=True, filename=''):
-    """ Function to create a video animation from a trial, only for the gaze data.
-        The animation represents the movements of the gaze and the progressive position history.
-    """
-    x = trial.kinematics['gaze_x']
-    y = trial.kinematics['gaze_y']
-    x_med = median_filter(trial.kinematics['gaze_x'],filter)
-    y_med = median_filter(trial.kinematics['gaze_y'],filter)
-    b = 0
-    try: 
-        bx = trial.kinematics['ball_x']
-        by = trial.kinematics['ball_y']
-        b = 1
-    except: print("",end="")
-    
-    def init():
-        line[0].set_data([],[])
-        line[1].set_data([],[])
-        line[2].set_data([],[])
-        line[3].set_data([],[])
-        return line, 
-
-    def anim(i):
-        i = i*speed
-        try: time_text.set_text(trial.kinematics['frame_s'][i])
-        except: print("",end="")
-        line[0].set_data(x[:i],y[:i])
-        line[2].set_data(x_med[:i],y_med[:i])
-        try: 
-            line[1].set_data(bx[:i],by[:i])
-            line[3].set_data(bx[:i],by[:i])
-        except: 'bx/by do not exist'
-        return line, 
-
-    fig, (ax1, ax2) = plt.subplots(1,2, figsize=(10,6))
-    fig.suptitle(("Trial " + str(trial.num) + trial.name))
-    time_text = ax1.text(0.95, 0.95,'', ha='right', va='top',transform=ax1.transAxes)
-    ax1.text(0.96, 0.98,'Time (s)', ha='right', va='top',transform=ax1.transAxes)
-    ax1.set_ylabel('Gaze Y position (m)')
-    ax1.set_xlabel('Gaze X position (m)'), ax2.set_xlabel('Gaze X position (m)')
-    ax1.title.set_text("Original"), ax2.title.set_text("Filtered: " + str(filter) + " (ms) median")
-    line1, = ax1.plot([], [], lw=2)
-    line3, = ax2.plot([], [], lw=2, label='gaze')
-    if b == 1: 
-        line2, = ax1.plot([], [], lw=3, color='r')
-        line4, = ax2.plot([], [], lw=3, color='r', label = 'ball')
-    else: 
-        line2, = ax1.plot([], [])
-        line4, = ax2.plot([], [])
-    line = [line1, line2, line3, line4]
-    for ax in [ax1, ax2]:
-        ax.set_xlim(-0.5,0.5)
-        ax.set_ylim(-0.1,1)
-    plt.legend(title = 'Positions')
-    plt.tight_layout()
-    ani = animation.FuncAnimation(fig, anim, init_func=init, interval=1, blit=False, repeat=False, save_count=trial.count/speed)
-    if save:
-        path = './animations/' + filename + '.mp4'
-        if not os.path.isfile(path): ani.save(path, fps=100, progress_callback=save_cb)
-        else: print("File already exists.")
-    if plot: plt.show()
-
-def static_gaze_single_medfilt(trial, plot=True, save=True, filename=''):
-    """ Function to create a static image from a trial and apply the median filter, only for the gaze data.
-    """
-    x = trial.kinematics['gaze_x']
-    y = trial.kinematics['gaze_y']
-    x_med = trial.kinematics['filtered_x']
-    y_med = trial.kinematics['filtered_y']
-    b = 0
-    try: 
-        bx = trial.kinematics['ball_x']
-        by = trial.kinematics['ball_y']
-        b = 1
-    except: print("",end="")
-    
-    fig, (ax1, ax2) = plt.subplots(1,2, figsize=(10,6))
-    fig.suptitle(("Trial " + str(trial.num) + trial.name))
-    ax1.text(0.95, 0.95, round(trial.duration,2) , ha='right', va='top',transform=ax1.transAxes)
-    ax1.text(0.96, 0.98,'Time (s)', ha='right', va='top',transform=ax1.transAxes)
-    ax1.set_ylabel('Gaze Y position (m)')
-    ax1.set_xlabel('Gaze X position (m)'), ax2.set_xlabel('Gaze X position (m)')
-    ax1.title.set_text("Original"), ax2.title.set_text("Filtered: " + str(trial.filter_size*2) + " (ms) median")
-    line1, = ax1.plot([], [], lw=2)
-    line2, = ax1.plot([], [], lw=3, color='r')
-    line3, = ax2.plot([], [], lw=2, label='gaze')
-    line4, = ax2.plot([], [], lw=3, color='r', label = 'ball')
-    if b == 1:
-        line2.set_data(bx,by)
-        line4.set_data(bx,by)
-    line1.set_data(x,y)
-    line3.set_data(x_med,y_med)
-    for ax in [ax1, ax2]:
-        ax.set_xlim(-0.5,0.5)
-        ax.set_ylim(-0.1,1)
-    plt.legend(title = 'Positions')
-    plt.tight_layout()
-
-    if save:
-        path = './animations/newfilter/' + filename + '.png'
-        if not os.path.isfile(path): plt.savefig(path, fps=100)#, progress_callback=save_cb)
-        else: print("File already exists.")
-    if plot: plt.show()
-
-def animate_simple_medfilt(dforigin, dffilter, filter = 7, speed:int=1, plot=True, save=True, filename='animation_filter'):
-    """ Function to create a video animation from a dataframe, only for the gaze data.
-    """
-    x = dforigin['Gaze_X']
-    y = dforigin['Gaze_Y']
-    x_med = dffilter['X filter']
-    y_med = dffilter['Y filter']
-    # b = 0 
-    # try: 
-    #     bx = trial.kinematics['ball_x']
-    #     by = trial.kinematics['ball_y']
-    #     b = 1
-    # except: print("",end="")
-    
-    def init():
-        line[0].set_data([],[])
-        line[1].set_data([],[])
-        line[2].set_data([],[])
-        line[3].set_data([],[])
-        return line, 
-
-    def anim(i):
-        i = i*speed
-        try: time_text.set_text(dffilter['Frame time (s)'][i])
-        except: print("",end="")
-        line[0].set_data(x[:i],y[:i])
-        line[2].set_data(x_med[:i],y_med[:i])
-        # try: 
-        #     line[1].set_data(bx[:i],by[:i])
-        #     line[3].set_data(bx[:i],by[:i])
-        # except: 'bx/by do not exist'
-        return line, 
-
-    fig, (ax1, ax2) = plt.subplots(1,2, figsize=(10,6))
-    fig.suptitle(("Filtered comparison "))# + str(trial.num) + trial.name))
-    time_text = ax1.text(0.95, 0.95,'', ha='right', va='top',transform=ax1.transAxes)
-    ax1.text(0.96, 0.98,'Time (s)', ha='right', va='top',transform=ax1.transAxes)
-    ax1.set_ylabel('Gaze Y position (m)')
-    ax1.set_xlabel('Gaze X position (m)'), ax2.set_xlabel('Gaze X position (m)')
-    ax1.title.set_text("Original"), ax2.title.set_text("Filtered: " + str(filter) + " (ms) median")
-    line1, = ax1.plot([], [], lw=2)
-    line3, = ax2.plot([], [], lw=2, label='gaze')
-    # if b == 1: 
-    #     line2, = ax1.plot([], [], lw=3, color='r')
-    #     line4, = ax2.plot([], [], lw=3, color='r', label = 'ball')
-    # else: 
-    line2, = ax1.plot([], [])
-    line4, = ax2.plot([], [])
-    line = [line1, line2, line3, line4]
-    for ax in [ax1, ax2]:
-        ax.set_xlim(-0.5,0.5)
-        ax.set_ylim(-0.1,1)
-    plt.legend(title = 'Positions')
-    plt.tight_layout()
-    ani = animation.FuncAnimation(fig, anim, init_func=init, interval=1, blit=False, repeat=False, save_count=len(dffilter)/speed)
-    if save:
-        path = './animations/' + filename + '.mp4'
-        if not os.path.isfile(path): ani.save(path, fps=100, progress_callback=save_cb)
-        else: print("File already exists.")
-    if plot: plt.show()
-
-def animate_gaze_single_medfilt(trial, speed:int=1, plot=True, save=True, filename=''):
-    """ Function to create a video animation from a trial, only for the gaze data.
-        The animation represents the movements of the gaze and the progressive position history.
-    """
-    x = trial.kinematics['gaze_x']
-    y = trial.kinematics['gaze_y']
-    # x_med = median_filter(trial.kinematics['gaze_x'],filter)
-    # y_med = median_filter(trial.kinematics['gaze_y'],filter)
-    x_med = trial.kinematics['filtered_x']
-    y_med = trial.kinematics['filtered_y']
-    b = 0
-    try: 
-        bx = trial.kinematics['ball_x']
-        by = trial.kinematics['ball_y']
-        b = 1
-    except: print("",end="")
-    
-    def init():
-        line[0].set_data([],[])
-        line[1].set_data([],[])
-        line[2].set_data([],[])
-        line[3].set_data([],[])
-        return line, 
-
-    def anim(i):
-        i = i*speed
-        try: time_text.set_text(trial.kinematics['frame_s'][i])
-        except: print("",end="")
-        line[0].set_data(x[:i],y[:i])
-        line[2].set_data(x_med[:i],y_med[:i])
-        try: 
-            line[1].set_data(bx[:i],by[:i])
-            line[3].set_data(bx[:i],by[:i])
-        except: 'bx/by do not exist'
-        return line, 
-
-    fig, (ax1, ax2) = plt.subplots(1,2, figsize=(10,6))
-    fig.suptitle(("Trial " + str(trial.num) + trial.name))
-    time_text = ax1.text(0.95, 0.95,'', ha='right', va='top',transform=ax1.transAxes)
-    ax1.text(0.96, 0.98,'Time (s)', ha='right', va='top',transform=ax1.transAxes)
-    ax1.set_ylabel('Gaze Y position (m)')
-    ax1.set_xlabel('Gaze X position (m)'), ax2.set_xlabel('Gaze X position (m)')
-    ax1.title.set_text("Original"), ax2.title.set_text("Filtered: " + str(trial.filter_size*2) + " (ms) median")
-    line1, = ax1.plot([], [], lw=2)
-    line3, = ax2.plot([], [], lw=2, label='gaze')
-    if b == 1: 
-        line2, = ax1.plot([], [], lw=3, color='r')
-        line4, = ax2.plot([], [], lw=3, color='r', label = 'ball')
-    else: 
-        line2, = ax1.plot([], [])
-        line4, = ax2.plot([], [])
-    line = [line1, line2, line3, line4]
-    for ax in [ax1, ax2]:
-        ax.set_xlim(-0.5,0.5)
-        ax.set_ylim(-0.1,1)
-    plt.legend(title = 'Positions')
-    plt.tight_layout()
-    ani = animation.FuncAnimation(fig, anim, init_func=init, interval=1, blit=False, repeat=False, save_count=trial.count/speed)
-    if save:
-        path = './animations/newfilter/' + filename + '.mp4'
-        if not os.path.isfile(path): ani.save(path, fps=100, progress_callback=save_cb)
-        else: print("File already exists.")
-    if plot: plt.show()
-
-def static_simple_medfilt(dforigin, dffilter, filter=7, plot=True, save=True, filename=''):
-    """ Function to create a static image from a dataframe, only for the gaze data.
-    """
-    x = dforigin['Gaze_X']
-    y = dforigin['Gaze_Y']
-    x2 = dffilter['X filter']
-    y2 = dffilter['Y filter']
-    
-    fig, (ax1, ax2) = plt.subplots(1,2, figsize=(10,6))
-    fig.suptitle(("Plot from dataframe "))# + str(trial.num) + trial.name))
-    ax1.text(0.95, 0.95, round(dffilter.iloc[-1]['Frame time (s)'],2) , ha='right', va='top',transform=ax1.transAxes)
-    ax1.text(0.96, 0.98,'Total time (s)', ha='right', va='top',transform=ax1.transAxes)
-    ax1.set_ylabel('Gaze Y position (m)')
-    ax1.set_xlabel('Gaze X position (m)'), ax2.set_xlabel('Gaze X position (m)')
-    ax1.title.set_text("Original"), ax2.title.set_text("Filtered: " + str(filter) + " (ms) median")
-
-    line1, = ax1.plot([], [], lw=2)
-    line3, = ax2.plot([], [], lw=2, label='gaze')
-    
-    line1.set_data(x,y)
-    line3.set_data(x2,y2)
-    for ax in [ax1, ax2]:
-        ax.set_xlim(-0.5,0.5)
-        ax.set_ylim(-0.1,1)
-    plt.legend(title = 'Positions')
-    plt.tight_layout()
-
-    if save:
-        path = './images/' + filename + '.png'
-        if not os.path.isfile(path): plt.savefig(path, fps=100)#, progress_callback=save_cb)
-        else: print("File already exists.")
-    if plot: plt.show()
-
 def animate_gaze_triple(trial, speed:int=1, plot=True, save=True, filename='animation3_triple'):
     """ Function a video for a triple frame animation, similar to animate_gaze_single.
         1: gaze position 2: gaze position + history 3: full history.
@@ -455,6 +193,174 @@ def animate_all(trial, save=True, plot=True, speed:int=1):
         print('Animation saved under :', title)
     if plot: plt.show()
 
+def animate_gaze_single_medfilt_old(trial, speed:int=1, filter=3, plot=True, save=True, filename=''):
+    """ Function to create a video animation from a trial, only for the gaze data.
+        The animation represents the movements of the gaze and the progressive position history.
+    """
+    x = trial.kinematics['gaze_x']
+    y = trial.kinematics['gaze_y']
+    x_med = median_filter(trial.kinematics['gaze_x'],filter)
+    y_med = median_filter(trial.kinematics['gaze_y'],filter)
+    b = 0
+    try: 
+        bx = trial.kinematics['ball_x']
+        by = trial.kinematics['ball_y']
+        b = 1
+    except: print("",end="")
+    
+    def init():
+        line[0].set_data([],[])
+        line[1].set_data([],[])
+        line[2].set_data([],[])
+        line[3].set_data([],[])
+        return line, 
+
+    def anim(i):
+        i = i*speed
+        try: time_text.set_text(trial.kinematics['frame_s'][i])
+        except: print("",end="")
+        line[0].set_data(x[:i],y[:i])
+        line[2].set_data(x_med[:i],y_med[:i])
+        try: 
+            line[1].set_data(bx[:i],by[:i])
+            line[3].set_data(bx[:i],by[:i])
+        except: 'bx/by do not exist'
+        return line, 
+
+    fig, (ax1, ax2) = plt.subplots(1,2, figsize=(10,6))
+    fig.suptitle(("Trial " + str(trial.num) + trial.name))
+    time_text = ax1.text(0.95, 0.95,'', ha='right', va='top',transform=ax1.transAxes)
+    ax1.text(0.96, 0.98,'Time (s)', ha='right', va='top',transform=ax1.transAxes)
+    ax1.set_ylabel('Gaze Y position (m)')
+    ax1.set_xlabel('Gaze X position (m)'), ax2.set_xlabel('Gaze X position (m)')
+    ax1.title.set_text("Original"), ax2.title.set_text("Filtered: " + str(filter) + " (ms) median")
+    line1, = ax1.plot([], [], lw=2)
+    line3, = ax2.plot([], [], lw=2, label='gaze')
+    if b == 1: 
+        line2, = ax1.plot([], [], lw=3, color='r')
+        line4, = ax2.plot([], [], lw=3, color='r', label = 'ball')
+    else: 
+        line2, = ax1.plot([], [])
+        line4, = ax2.plot([], [])
+    line = [line1, line2, line3, line4]
+    for ax in [ax1, ax2]:
+        ax.set_xlim(-0.5,0.5)
+        ax.set_ylim(-0.1,1)
+    plt.legend(title = 'Positions')
+    plt.tight_layout()
+    ani = animation.FuncAnimation(fig, anim, init_func=init, interval=1, blit=False, repeat=False, save_count=trial.count/speed)
+    if save:
+        path = './animations/' + filename + '.mp4'
+        if not os.path.isfile(path): ani.save(path, fps=100, progress_callback=save_cb)
+        else: print("File already exists.")
+    if plot: plt.show()
+
+def animate_gaze_single_medfilt(trial, speed:int=1, plot=True, save=True, filename=''):
+    """ Function to create a video animation from a trial, only for the gaze data.
+        The animation represents the movements of the gaze and the progressive position history.
+    """
+    x = trial.kinematics['gaze_x']
+    y = trial.kinematics['gaze_y']
+    # x_med = median_filter(trial.kinematics['gaze_x'],filter)
+    # y_med = median_filter(trial.kinematics['gaze_y'],filter)
+    x_med = trial.kinematics['filtered_x']
+    y_med = trial.kinematics['filtered_y']
+    b = 0
+    try: 
+        bx = trial.kinematics['ball_x']
+        by = trial.kinematics['ball_y']
+        b = 1
+    except: print("",end="")
+    
+    def init():
+        line[0].set_data([],[])
+        line[1].set_data([],[])
+        line[2].set_data([],[])
+        line[3].set_data([],[])
+        return line, 
+
+    def anim(i):
+        i = i*speed
+        try: time_text.set_text(trial.kinematics['frame_s'][i])
+        except: print("",end="")
+        line[0].set_data(x[:i],y[:i])
+        line[2].set_data(x_med[:i],y_med[:i])
+        try: 
+            line[1].set_data(bx[:i],by[:i])
+            line[3].set_data(bx[:i],by[:i])
+        except: 'bx/by do not exist'
+        return line, 
+
+    fig, (ax1, ax2) = plt.subplots(1,2, figsize=(10,6))
+    fig.suptitle(("Trial " + str(trial.num) + trial.name))
+    time_text = ax1.text(0.95, 0.95,'', ha='right', va='top',transform=ax1.transAxes)
+    ax1.text(0.96, 0.98,'Time (s)', ha='right', va='top',transform=ax1.transAxes)
+    ax1.set_ylabel('Gaze Y position (m)')
+    ax1.set_xlabel('Gaze X position (m)'), ax2.set_xlabel('Gaze X position (m)')
+    ax1.title.set_text("Original"), ax2.title.set_text("Filtered: " + str(trial.filter_size*2) + " (ms) median")
+    line1, = ax1.plot([], [], lw=2)
+    line3, = ax2.plot([], [], lw=2, label='gaze')
+    if b == 1: 
+        line2, = ax1.plot([], [], lw=3, color='r')
+        line4, = ax2.plot([], [], lw=3, color='r', label = 'ball')
+    else: 
+        line2, = ax1.plot([], [])
+        line4, = ax2.plot([], [])
+    line = [line1, line2, line3, line4]
+    for ax in [ax1, ax2]:
+        ax.set_xlim(-0.5,0.5)
+        ax.set_ylim(-0.1,1)
+    plt.legend(title = 'Positions')
+    plt.tight_layout()
+    ani = animation.FuncAnimation(fig, anim, init_func=init, interval=1, blit=False, repeat=False, save_count=trial.count/speed)
+    if save:
+        path = './animations/newfilter/' + filename + '.mp4'
+        if not os.path.isfile(path): ani.save(path, fps=100, progress_callback=save_cb)
+        else: print("File already exists.")
+    if plot: plt.show()
+
+def static_gaze_single_medfilt(trial, plot=True, save=True, filename=''):
+    """ Function to create a static image from a trial and apply the median filter, only for the gaze data.
+    """
+    x = trial.kinematics['gaze_x']
+    y = trial.kinematics['gaze_y']
+    x_med = trial.kinematics['filtered_x']
+    y_med = trial.kinematics['filtered_y']
+    b = 0
+    try: 
+        bx = trial.kinematics['ball_x']
+        by = trial.kinematics['ball_y']
+        b = 1
+    except: print("",end="")
+    
+    fig, (ax1, ax2) = plt.subplots(1,2, figsize=(10,6))
+    fig.suptitle(("Trial " + str(trial.num) + trial.name))
+    ax1.text(0.95, 0.95, round(trial.duration,2) , ha='right', va='top',transform=ax1.transAxes)
+    ax1.text(0.96, 0.98,'Time (s)', ha='right', va='top',transform=ax1.transAxes)
+    ax1.set_ylabel('Gaze Y position (m)')
+    ax1.set_xlabel('Gaze X position (m)'), ax2.set_xlabel('Gaze X position (m)')
+    ax1.title.set_text("Original"), ax2.title.set_text("Filtered: " + str(trial.filter_size*2) + " (ms) median")
+    line1, = ax1.plot([], [], lw=2)
+    line2, = ax1.plot([], [], lw=3, color='r')
+    line3, = ax2.plot([], [], lw=2, label='gaze')
+    line4, = ax2.plot([], [], lw=3, color='r', label = 'ball')
+    if b == 1:
+        line2.set_data(bx,by)
+        line4.set_data(bx,by)
+    line1.set_data(x,y)
+    line3.set_data(x_med,y_med)
+    for ax in [ax1, ax2]:
+        ax.set_xlim(-0.5,0.5)
+        ax.set_ylim(-0.1,1)
+    plt.legend(title = 'Positions')
+    plt.tight_layout()
+
+    if save:
+        path = './animations/newfilter/' + filename + '.png'
+        if not os.path.isfile(path): plt.savefig(path, fps=100)#, progress_callback=save_cb)
+        else: print("File already exists.")
+    if plot: plt.show()
+
 def armspeed(trial):
     """ Function to plot the arms speed over time for a given trial
     """
@@ -474,3 +380,98 @@ def img_list(trial):
     for i in range(trial.count):
         ax1.plot(x[i], y[i])
         plt.savefig()
+
+# DF only 
+def animate_simple_medfilt(dforigin, dffilter, filter = 7, speed:int=1, plot=True, save=True, filename='animation_filter'):
+    """ Function to create a video animation from a dataframe, only for the gaze data.
+    """
+    x = dforigin['Gaze_X']
+    y = dforigin['Gaze_Y']
+    x_med = dffilter['X filter']
+    y_med = dffilter['Y filter']
+    # b = 0 
+    # try: 
+    #     bx = trial.kinematics['ball_x']
+    #     by = trial.kinematics['ball_y']
+    #     b = 1
+    # except: print("",end="")
+    
+    def init():
+        line[0].set_data([],[])
+        line[1].set_data([],[])
+        line[2].set_data([],[])
+        line[3].set_data([],[])
+        return line, 
+
+    def anim(i):
+        i = i*speed
+        try: time_text.set_text(dffilter['Frame time (s)'][i])
+        except: print("",end="")
+        line[0].set_data(x[:i],y[:i])
+        line[2].set_data(x_med[:i],y_med[:i])
+        # try: 
+        #     line[1].set_data(bx[:i],by[:i])
+        #     line[3].set_data(bx[:i],by[:i])
+        # except: 'bx/by do not exist'
+        return line, 
+
+    fig, (ax1, ax2) = plt.subplots(1,2, figsize=(10,6))
+    fig.suptitle(("Filtered comparison "))# + str(trial.num) + trial.name))
+    time_text = ax1.text(0.95, 0.95,'', ha='right', va='top',transform=ax1.transAxes)
+    ax1.text(0.96, 0.98,'Time (s)', ha='right', va='top',transform=ax1.transAxes)
+    ax1.set_ylabel('Gaze Y position (m)')
+    ax1.set_xlabel('Gaze X position (m)'), ax2.set_xlabel('Gaze X position (m)')
+    ax1.title.set_text("Original"), ax2.title.set_text("Filtered: " + str(filter) + " (ms) median")
+    line1, = ax1.plot([], [], lw=2)
+    line3, = ax2.plot([], [], lw=2, label='gaze')
+    # if b == 1: 
+    #     line2, = ax1.plot([], [], lw=3, color='r')
+    #     line4, = ax2.plot([], [], lw=3, color='r', label = 'ball')
+    # else: 
+    line2, = ax1.plot([], [])
+    line4, = ax2.plot([], [])
+    line = [line1, line2, line3, line4]
+    for ax in [ax1, ax2]:
+        ax.set_xlim(-0.5,0.5)
+        ax.set_ylim(-0.1,1)
+    plt.legend(title = 'Positions')
+    plt.tight_layout()
+    ani = animation.FuncAnimation(fig, anim, init_func=init, interval=1, blit=False, repeat=False, save_count=len(dffilter)/speed)
+    if save:
+        path = './animations/' + filename + '.mp4'
+        if not os.path.isfile(path): ani.save(path, fps=100, progress_callback=save_cb)
+        else: print("File already exists.")
+    if plot: plt.show()
+
+def static_simple_medfilt(dforigin, dffilter, filter=7, plot=True, save=True, filename=''):
+    """ Function to create a static image from a dataframe, only for the gaze data.
+    """
+    x = dforigin['Gaze_X']
+    y = dforigin['Gaze_Y']
+    x2 = dffilter['X filter']
+    y2 = dffilter['Y filter']
+    
+    fig, (ax1, ax2) = plt.subplots(1,2, figsize=(10,6))
+    fig.suptitle(("Plot from dataframe "))# + str(trial.num) + trial.name))
+    ax1.text(0.95, 0.95, round(dffilter.iloc[-1]['Frame time (s)'],2) , ha='right', va='top',transform=ax1.transAxes)
+    ax1.text(0.96, 0.98,'Total time (s)', ha='right', va='top',transform=ax1.transAxes)
+    ax1.set_ylabel('Gaze Y position (m)')
+    ax1.set_xlabel('Gaze X position (m)'), ax2.set_xlabel('Gaze X position (m)')
+    ax1.title.set_text("Original"), ax2.title.set_text("Filtered: " + str(filter) + " (ms) median")
+
+    line1, = ax1.plot([], [], lw=2)
+    line3, = ax2.plot([], [], lw=2, label='gaze')
+    
+    line1.set_data(x,y)
+    line3.set_data(x2,y2)
+    for ax in [ax1, ax2]:
+        ax.set_xlim(-0.5,0.5)
+        ax.set_ylim(-0.1,1)
+    plt.legend(title = 'Positions')
+    plt.tight_layout()
+
+    if save:
+        path = './images/' + filename + '.png'
+        if not os.path.isfile(path): plt.savefig(path, fps=100)#, progress_callback=save_cb)
+        else: print("File already exists.")
+    if plot: plt.show()
