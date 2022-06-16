@@ -2,19 +2,38 @@
 
 ## Description
 
-In this core repository we have the programs and tests to analyse the CSV files and their trials.
-Contains the modules to automatically extract the data columns for each trial, for any task.
+In this core repository we have the programs and tests to analyse the CSV files and their trials.  
+The directory contains the modules to automatically extract the data columns for each trial, for any task.
 *TODO* : Statistics module. 
 
 # Getting Started
 
-[Notebook Walkthrough](https://github.com/toelt-llc/gaze-kuleuven/blob/main/code/nb_walkthrough.ipynb)  
-[Running an animation Example]: see 'Executing programs'
+[Notebook Walkthrough](https://github.com/toelt-llc/gaze-kuleuven/blob/main/code/nb_walkthrough.ipynb) to get into the process of the csv reading and visualisation.  
+Running an animation Example: see [Executing programs](https://github.com/toelt-llc/RESEARCH-gaze-kuleuven/tree/main/code#executing-programs)
 
 ### Dependencies
 
-* Python, with libraries:  
- -Jupyterlab, Pandas, Numpy, Matplotlib
+<< Get someone with no previous talk or info into it. Numbering steps
+1- python and libraries
+2- data
+3- which files to run 
+
+* Python, with libraries:
+- [Install python](https://www.python.org/downloads/)
+- Install libraries: 
+    - Jupyterlab, Pandas, Numpy, Matplotlib
+```bash
+python -m pip install jupyterlab
+python -m pip install pandas
+python -m pip install numpy
+python -m pip install matplotlib
+```
+
+* Data: 
+Stored in the *files* folder.  
+**Note** due to the size of the files they can not be uploaded on GitHub, please contact us for access.  
+The files are annoted large csv tables containing the kinematics informations from each experiments.  In the files the trials are individually separated.  The files also contain experiments setup data that we do not use.  
+
 
 ## Content
 
@@ -41,9 +60,8 @@ Contains visualizations for differents parameters. Images are also obtained from
 * Running the [Notebook Walkthrough](https://github.com/toelt-llc/gaze-kuleuven/blob/main/code/nb_walkthrough.ipynb) helps to understand the steps involved, from the CSV files reading to the animations and extraction of parameters.   
 
 * Running the animations script
-```
+```python
 > python3 anim_showcase.py
->
 > python3 anim_showcase2.py
 ```
 

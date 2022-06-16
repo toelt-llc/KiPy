@@ -1,4 +1,4 @@
-# gaze-kuleuven
+# Gaze-kuleuven
 
 <Landing page : Here need to identify purpose of the folder, as well as an introduction>
 
@@ -17,12 +17,12 @@ The statistics on the measure can be further used for the analysis of evaluation
 ***Figure : Representation example***  
 ![Whole anim](https://github.com/toelt-llc/gaze-kuleuven/blob/main/code/animations/final/convertedall.gif) 
 
-## Concept
+# Concept
 In our part of the project we focus on the reading of the csv files: what can we extract that the software does not produces.  
-With the research problematics in head we want to access both the hand positions data and the gaze tracking data.  
-From the gaze positions history we can compute various statistics.
+<!-- With the research problematics in head  -->
+To produce visualisations and to compute statistic we need to access both the hand positions data and the gaze tracking data. 
 
-### Results  
+## Results  
 *What was down with the raw CSVs and what can we learn from them.*   
 
 - We extracted the dataframes : 1 dataframe = 1 exercise trial (learned how to extract differently for each exercise)  
@@ -32,19 +32,17 @@ From the gaze positions history we can compute various statistics.
         - Kinematics: the positions, angles and speeds.  
         - Events: If an event happens at a given frame, it will be noted in the according row.  
 
-## Tutorial
-<< Get someone with no previous talk or info into it. Numbering steps
-1- python and libraries
-2- data
-3- which files to run 
+## Running the code
+
+To run the code a basic installation of python is needed, further details are in the [Code readme](https://github.com/toelt-llc/RESEARCH-gaze-kuleuven/tree/main/code#readme)
 
 ### Walkthrough file (move to code/README.md ?)
 This [notebook](https://github.com/toelt-llc/gaze-kuleuven/blob/main/code/nb_walkthrough.ipynb) contains an overview of what was done at first, without getting deep in the python code.  
-The [second notebook](https://github.com/toelt-llc/gaze-kuleuven/blob/main/code/processing_filter.ipynb) goes through the second part of this work where we try to filter and compute results out of flickering data.  
+The [second notebook](https://github.com/toelt-llc/RESEARCH-gaze-kuleuven/blob/main/code/processing_flicker.ipynb) goes through the second part of this work where we try to filter and compute results out of flickering data.  
 ## Content
 ### code 
 Contains:
-- walkthrough (and experimental) notebooks & scripts.
+- walkthrough (and experimental) notebooks & scripts, detailed in the [Code readme](https://github.com/toelt-llc/RESEARCH-gaze-kuleuven/tree/main/code#readme).
 - **animations**, possible animations of gaze/hands data.  
 See example above.  
 - **bash_scripts**, pre-processing scripts used during csv exploration. 
