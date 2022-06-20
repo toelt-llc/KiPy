@@ -31,12 +31,12 @@ class Trial:
         #self.plot = self.plots()
 
     def plot_movements(self,name="fig_default.png", save=False, show=True):
-        fig = plt.figure()
+        fig = plt.figure(figsize=(10,6))
         plt.plot(self.kinematics['right_x'],self.kinematics['right_y'],'ro', label='right')
         plt.plot(self.kinematics['left_x'],self.kinematics['left_y'],'bo', label='left')
         plt.plot(self.kinematics['gaze_x'],self.kinematics['gaze_y'],'go', label='gaze')
-        plt.xlim([-0.5,0.5])
-        plt.ylim([0,1])
+        plt.xlim([-0.5,0.5]), plt.xlabel("X position (m)")
+        plt.ylim([0,1]), plt.ylabel("Y position (m)")
         plt.legend()
         plt.title("Summary plot. Duration : " + str(self.duration))
 
