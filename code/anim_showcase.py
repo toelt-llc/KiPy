@@ -1,8 +1,9 @@
 #!/usr/bin/env python3
-import sys
-sys.path.append('./animations/')
+import anim, sys, time
 from csv_load import *
-import anim
+sys.path.append('./animations/')
+
+start_time = time.time()
 
 reaching = "../files/utf8/Visually_Guided_Reaching_-_[Child_v2_-_practice]_-_LEFT_-_11_49.csv"
 reaching2 = "../files/utf8/Visually_Guided_Reaching_-_Child_v2_(4_target)_-_LEFT_-_11_50.csv"
@@ -24,6 +25,8 @@ for i in range(len(dfs)):
     #anim.animate_gaze_single(trial, plot=True, save=False, speed=10, filename=trial.name)
     #anim.animate_gaze_triple(trial, plot=True, save=False, speed=20, filename=trial.name)
     #anim.animate_all(trial, plot=True, save=False, speed=10)
+
+print("Process finished -- %s seconds --" % round((time.time() - start_time),2))
 
 # Command to convert the videos to gifs
 #ffmpeg -i animation2_v3.mp4 -r 30 converted2.gif  

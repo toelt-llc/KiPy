@@ -83,3 +83,8 @@ Lines 23 to 26 contain commented functions that can the user can run and modify 
 - **anim.animate_gaze_single()**: plots animation of the gaze for each trial
 - **anim.animate_gaze_triple()**: plots the same animation but with 1:gaze position 2: gaze position + history 3: full position history
 - **anim.animate_all()**: plots the triple animation and includes the hand positions.
+
+### *anim_showcase2.py*
+Similar idea than the previous script, the goal here is to visualise the effects of some filtering attempts on flickering data(the 2nd dataset).  
+- **anim.animate_gaze_single_medfilt()**: plots animation of the data filtered data compared to the raw flickering data
+- **anim.static_gaze_single_medfilt()**: plots static position history of the filtered vs raw

@@ -7,7 +7,8 @@ from matplotlib.animation import FuncAnimation
 # Future parameters will be added when needed for analysis.  
 
 class Trial:
-    """ doc
+    """ Trial class used to save the general info, kinematics and events list for a given trial from a dataframe.
+        Dataframe are extracted from the raw CSVs, selected columns are read. 
     """
     def __init__(self, df, name, filter) -> None: 
         self.name = name  # variable to keep track of the exercise 
@@ -95,7 +96,7 @@ class Kinematics:
         try: 
             self.values['ball_x'] = list(df['x_ball_pos'])
             self.values['ball_y'] = list(df['y_ball_pos'])
-        except: print('')
+        except: print('',end='')
 
 
 def extract_dataframes(file, offset=0, encode='utf_8', set=1):
@@ -127,22 +128,24 @@ def stat(series):
     """ Used to compute the mean/std duration of similar events, eg. mean duration of saccades"""
     ## TODO: for max and min
     lst = []
-    for i in range(0, len(series)-1, 2):
-        lst.append(series[i+1][0] - series[i][0])   # 0: duration in frames, 1: duration in seconds
-    arr = np.array(lst)
+    if len(series) > 0: # avoids 0 divisions
+        for i in range(0, len(series)-1, 2):
+            lst.append(series[i+1][1] - series[i][1])   # 0: duration in frames, 1: duration in seconds
+        arr = np.array(lst)
 
-    return round(np.mean(arr),2), round(np.std(arr),2) 
+        return round(np.mean(arr),2), round(np.std(arr),2) 
 
 def medfilt(df, f):
-            """ df: raw dataframe
-                f: filter size, in both directions
-            """
-            #newdf = pd.DataFrame()
-            arrx, arry = [], []
-            for i in range(len(df)):
-                arrx.append(np.nanmedian(df['Gaze_X'][i-f:i+f]))
-                arry.append(np.nanmedian(df['Gaze_Y'][i-f:i+f]))
-            # newdf['X filter'], newdf['Y filter'] = arrx, arry
-            # newdf['Frame time (s)'] = df['Frame time (s)']
-
-            return arrx, arry
+    """ Output the median filtered series from gazeX and Y 
+        df: raw dataframe
+        f: filter size, in both directions
+    """
+    #newdf = pd.DataFrame()
+    arrx, arry = [], []
+    if f:
+        for i in range(len(df)):
+            arrx.append(np.nanmedian(df['Gaze_X'][i-f:i+f]))    ## When ran on NaNs only arrays nanmedian outputs NaN
+            arry.append(np.nanmedian(df['Gaze_Y'][i-f:i+f]))
+    # newdf['X filter'], newdf['Y filter'] = arrx, arry
+    # newdf['Frame time (s)'] = df['Frame time (s)']
+    return arrx, arry
