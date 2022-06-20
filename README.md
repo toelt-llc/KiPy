@@ -1,15 +1,13 @@
 # Gaze-kuleuven
-
-<Landing page : Here need to identify purpose of the folder, as well as an introduction>
-
 This folder contains the data processing exploration from the project shared with KU Leuven.  
-The project assesses cerebral palsy and other possible brain damages in children aged 7 to 15, thanks to a non-invasive tool.  
-Research Ojectives :  
+
+The project aims to assess cerebral palsy and other possible brain damages in children aged 7 to 15, thanks to a non-invasive tool.  
+Research Objectives :  
 -1 Visual functions assessment.  
 -2 Visual impact on manual control -> from the **task experiments**.  
 -3 MRI data coupling: structural visualization.  
 
-Here we focus on 1,2.   
+Here we focus on 1 & 2.   
 We use data extracted from the Kinarm software as CSV files.   4 different type of tasks are available.  
 The goal is to extract the experiments measurements from these files. Then, from the measures we study what is possible to obtain in terms of statistics and graphical representation.  
 The statistics on the measure can be further used for the analysis of evaluation parameters, linked to the research questions.  
@@ -48,11 +46,11 @@ See example above.
 - **bash_scripts**, pre-processing scripts used during csv exploration. 
 - **images**, possibles plots of gaze/hands data.
 ### docs
-Explanatory documents from Monica, with kinarm matlab sources, documentation and presentations.
+Explanatory documents from Monica Crotti, with kinarm matlab sources, documentation and presentations.
 ### files
 Folder where the csv are stored, important for the path variable used in code.  
 Subfolders:  
 - *set1*, *set2*   : original CSVs in raw format (ISO-8859)
 - *utf8*, *utf8_2* : converted CSV files 
 
--- Documentation version: 05/2022 --
+-- Documentation version: 06/2022 --
