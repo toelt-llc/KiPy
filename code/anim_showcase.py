@@ -10,18 +10,20 @@ practice_ball = "../files/utf8/Ball_on_Bar_-_[Child_-_practice_2_(30s_per_level)
 ball = "../files/utf8/Ball_on_Bar_-_Child_-_RIGHT_-_11_59.csv"
 practice_object = "../files/utf8/Object_Hit_-_[Child_-_practice]_-_RIGHT_-_12_02.csv"
 
-EXERCISE = practice_object
+EXERCISE = reaching
 dfs = extract_dataframes(EXERCISE)
+print("The input file contains {} trials.".format(len(dfs)))
 
-for i in range(1):
-    trial = Trial(dfs[i])
-    # print(trial.events)
+for i in range(len(dfs)):
+    trial = Trial(dfs[i], EXERCISE[14:24] + str(i), filter=None)
+    #print(trial.events) # Outputs the dic of events, with starting frame and starting second
+    #print(trial.event_mean) #Outputs the mean of the events duration for the given trial, also computes std
+
     # print(i, trial.count, trial.duration, trial.rate)
-    # print(trial.events)
-    #anim.armspeed(trial)
-    #anim.animate_gaze_single(trial, plot=True, save=False, speed=10, filename=('ball_single'+str(i)))
-    #anim.animate_gaze_triple(trial, plot=True, save=False, speed=20, filename=('balltriple_s'+str(i)))
-    #anim.animate_all(trial, save=True, plot=False, speed=2)
+    anim.armspeed(trial, filename=trial.name)
+    #anim.animate_gaze_single(trial, plot=True, save=False, speed=10, filename=trial.name)
+    #anim.animate_gaze_triple(trial, plot=True, save=False, speed=20, filename=trial.name)
+    #anim.animate_all(trial, plot=True, save=False, speed=10)
 
 # Command to convert the videos to gifs
 #ffmpeg -i animation2_v3.mp4 -r 30 converted2.gif  
