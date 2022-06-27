@@ -13,15 +13,10 @@ Running an animation Example: see [Executing programs](https://github.com/toelt-
 
 ### Dependencies
 
-<< Get someone with no previous talk or info into it. Numbering steps
-1- python and libraries
-2- data
-3- which files to run 
-
 * Python, with libraries:
 - [Install python](https://www.python.org/downloads/)
 - Install libraries: 
-    - jupyterlab, pandas, numpy, matplotlib
+    - jupyterlab, pandas, numpy, matplotlib, pickle, blosc
     - With a python install do the following:  
 ```bash
 python -m pip install [library]

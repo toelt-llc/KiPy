@@ -1,4 +1,7 @@
 #!/bin/bash
+
+# Bash script to convert all the CSVs to UTF8 formatting
+
 cd ../files/
 mkdir -p ../files/utf8
 for f in ../files/set1*; do
