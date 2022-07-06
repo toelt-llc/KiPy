@@ -480,7 +480,7 @@ def static_simple_medfilt(dforigin, dffilter, filter=7, plot=True, save=True, fi
     plt.tight_layout()
 
     if save:
-        path = './images/' + filename + '.png'
-        if not os.path.isfile(path): plt.savefig(path, fps=100)#, progress_callback=save_cb)
+        path = './images/' + filename + '.eps'
+        if not os.path.isfile(path): plt.savefig(path, fps=100, format='eps')#, progress_callback=save_cb)
         else: print("File already exists.")
     if plot: plt.show()
