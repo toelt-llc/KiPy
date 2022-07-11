@@ -484,3 +484,9 @@ def static_simple_medfilt(dforigin, dffilter, filter=7, plot=True, save=True, fi
         if not os.path.isfile(path): plt.savefig(path, fps=100, format='eps')#, progress_callback=save_cb)
         else: print("File already exists.")
     if plot: plt.show()
+
+def plot_eyes(trial, plot = True, save = True, filename = 'figure5'):
+    pass
+    x = trial.kinematics['gaze_x']
+    y = trial.kinematics['gaze_y']
+
