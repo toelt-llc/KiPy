@@ -1,4 +1,4 @@
-CONTENT INFO
+# Various Documentation 
 
 - Kinarm_scripts: scripts from the KINARM webiste
 - MANUALS: KINARM, GAZE TRACKER and EYE LINKK manuals 
