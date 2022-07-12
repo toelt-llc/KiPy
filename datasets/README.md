@@ -1,4 +1,4 @@
-# Eye-Gaze available publich datasets
+# Eye-Gaze available public datasets
 
 1. MIT saliency datasets http://saliency.mit.edu/datasets.html  
 2. Gazecapture https://gazecapture.csail.mit.edu/download.php  
