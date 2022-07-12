@@ -1,18 +1,33 @@
-# Gaze-kuleuven
-This folder contains the data processing exploration from the project shared with KU Leuven.  
+# KiPy - Software to extract hands and eye-gaze coordinates from Kinarm Files
 
-The project aims to assess cerebral palsy and other possible brain damages in children aged 7 to 15, thanks to a non-invasive tool.  
+Author: Arnaud Gucciardi, (C) 2022 A. Gucciardi
+
+This repository contains the KiPy software. It is better described in the paper
+
+_A New Median Filter Approach to Deal with Large Windows of Missing Data in Eye-gaze Measurements_
+Arnaud Gucciardi, Monica Crotti, Nofar Ben Itzhak, Lisa Mailleux, Els Ortibus, and Umberto Michelucci
+
+In case you use it a reference to this paper will be nice.
+
+<!--This folder contains the data processing exploration from the project shared with KU Leuven.  -->
+
+# Background
+
+The software will help assessing cerebral palsy and other possible brain damages in children aged 7 to 15, thanks to a non-invasive tool.  
 Research Objectives :  
--1 Visual functions assessment.  
--2 Visual impact on manual control -> from the **task experiments**.  
--3 MRI data coupling: structural visualization.  
+1. Visual functions assessment.  
+2. Visual impact on manual control -> from the **task experiments**.  
+3. MRI data coupling: structural visualization.  
 
-Here we focus on 1 & 2.   
+This software is the basis for the 3 tasks.
+
+# Brief Description
+
 We use data extracted from the Kinarm software as CSV files.   4 different type of tasks are available.  
 The goal is to extract the experiments measurements from these files. Then, from the measures we study what is possible to obtain in terms of statistics and graphical representation.  
 The statistics on the measure can be further used for the analysis of evaluation parameters, linked to the research questions.  
 
-***Figure : Representation example***  
+***Figure 1: Representation example***  
 ![Whole anim](https://github.com/toelt-llc/gaze-kuleuven/blob/main/code/animations/final/convertedall.gif) 
 
 # Concept
@@ -20,7 +35,7 @@ In our part of the project we focus on the reading of the csv files: what can we
 <!-- With the research problematics in head  -->
 To produce visualisations and to compute statistic we need to access both the hand positions data and the gaze tracking data. 
 
-## Results  
+<!--## Results  
 *What was down with the raw CSVs and what can we learn from them.*   
 
 - We extracted the dataframes : 1 dataframe = 1 exercise trial (learned how to extract differently for each exercise)  
@@ -29,7 +44,7 @@ To produce visualisations and to compute statistic we need to access both the ha
     - Data columns for each rows can be separated in 2 categories: 
         - Kinematics: the positions, angles and speeds.  
         - Events: If an event happens at a given frame, it will be noted in the according row.  
-
+-->
 ## Running the code
 
 To run the code a basic installation of python is needed, further details are in the [Code readme](https://github.com/toelt-llc/RESEARCH-gaze-kuleuven/tree/main/code#readme)
