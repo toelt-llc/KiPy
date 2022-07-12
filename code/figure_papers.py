@@ -7,7 +7,7 @@ from csv_load import *
 
 start_time = time.time()
 
-DIR = "../files/pickles/1/"
+DIR = "../files/pickles/2/"
 FILES = []
 for root, dir, files in os.walk(DIR, topdown=False):
     for file in sorted(files):
@@ -15,14 +15,14 @@ for root, dir, files in os.walk(DIR, topdown=False):
 print(FILES)
 
 for pickled_dfs in FILES[:-2]:
-    if pickled_dfs[19] != 'C':
+    if pickled_dfs[19] == 'B':
         with open(pickled_dfs, "rb") as f:
             compressed_pickle = f.read()
         depressed_pickle = blosc.decompress(compressed_pickle)
         dfs = pickle.loads(depressed_pickle)
         print("The input file {} contains {} trials.".format(pickled_dfs ,len(dfs)))
 
-        for i in range(1):
+        for i in range(len(dfs)):
             trial = Trial(dfs[i], 'default name', filter=None)
             x = trial.kinematics['gaze_x']
             y = trial.kinematics['gaze_y']
@@ -33,7 +33,7 @@ for pickled_dfs in FILES[:-2]:
                 b = True
             except: print("",end="")
 
-            fig, (ax1,ax2) = plt.subplots(2,1, sharex=True)
+            fig, (ax1,ax2) = plt.subplots(2,1, sharex=True, figsize= (13,9))
             ax1.plot(t,y), ax1.set_ylabel('Gaze X position (m)')
             ax2.plot(t,x), ax2.set_ylabel('Gaze Y position (m)')
             if b: 

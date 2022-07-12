@@ -7,16 +7,6 @@ from csv_load import *
 
 start_time = time.time()
 
-DIR1 = "../files/pickles/2/"
-DIR2 = "../files/pickles/2/"
-FILES1, FILES2 = [], []
-for root, dir, files in os.walk(DIR1, topdown=False):
-    for file in sorted(files):
-        FILES1.append(os.path.join(root, file))
-for root, dir, files in os.walk(DIR2, topdown=False):
-    for file in sorted(files):
-        FILES2.append(os.path.join(root, file))
-
 trial1_ball = '../files/pickles/1/Ball_on_Bar_-_Child_-_RIGHT_-_11_59.pickle'
 trial2_ball = '../files/pickles/2/Ball_on_Bar_-_Child_-_RIGHT_-_10_21.pickle'
 trial1_obj = '../files/pickles/1/Object_Hit_-_Child_-_RIGHT_-_12_02.pickle'
@@ -44,31 +34,39 @@ x1v, y1v, t1v = trial1v.kinematics['gaze_x'], trial1v.kinematics['gaze_y'], tria
 x2v, y2v, t2v = trial2v.kinematics['gaze_x'], trial2v.kinematics['gaze_y'], trial2v.kinematics['frame_s']
 
 
-fig, axs = plt.subplots(6,2, figsize=(15,10))#, sharey=True)
+fig, axs = plt.subplots(6,2, figsize=(15,10),sharey='row')#, sharex='col')#, sharey=True)
+#Titles
+names = ['a.1', 'b.1', 'a.2', 'b.2', 'a.3', 'b.3', 'a.4', 'b.4', 'a.5', 'b.5', 'a.6', 'b.6']
+for i, ax in enumerate(axs.reshape(-1)):
+    ax.set_title(names[i], loc='center', fontsize='large', fontweight='bold')
+    ax.set_yticks(range(1), fontsize=10)
+    ax.tick_params(axis='both', which='major', labelsize=14)
+
 # A 1
-axs[0,0].plot(t1b,y1b), axs[0,0].plot(t1b,by1, color='gray', linestyle = '--'), axs[0,0].set_ylabel('Gaze Y')
-axs[1,0].plot(t1b,x1b), axs[1,0].plot(t1b,bx1, color='gray', linestyle = '--'), axs[1,0].set_ylabel('Gaze X')
+axs[0,0].plot(t1b,y1b,c='k'), axs[0,0].plot(t1b,by1, c='gray', linestyle = '--'), axs[0,0].set_ylabel('GazeY (m)', fontsize=17), axs[0,0].set_ylim(0, 0.6),     axs[0,0].set_yticks([0, 0.3, 0.6])
+axs[1,0].plot(t1b,x1b,c='k'), axs[1,0].plot(t1b,bx1, c='gray', linestyle = '--'), axs[1,0].set_ylabel('GazeX (m)', fontsize=17), axs[1,0].set_ylim(-0.2, 0.2),  axs[1,0].set_yticks([-0.2, 0, 0.2])
 # A 2
-axs[2,0].plot(t1o,y1o), axs[2,0].set_ylabel('Gaze Y')
-axs[3,0].plot(t1o,x1o), axs[3,0].set_ylabel('Gaze X')
+axs[2,0].plot(t1o,y1o,c='k'), axs[2,0].set_ylabel('GazeY (m)', fontsize=17), axs[2,0].set_ylim(0, 1), axs[2,0].set_yticks([0, 0.5, 1])
+axs[3,0].plot(t1o,x1o,c='k'), axs[3,0].set_ylabel('GazeX (m)', fontsize=17), axs[3,0].set_ylim(-0.5, 0.5), axs[3,0].set_yticks([-0.5, 0, 0.5])
 # A 3 
-axs[4,0].plot(t1v,y1v), axs[4,0].set_ylabel('Gaze Y')
-axs[5,0].plot(t1v,x1v), axs[5,0].set_ylabel('Gaze X'), axs[5,0].set_xlabel('Time (s)')
+axs[4,0].plot(t1v,y1v,c='k'), axs[4,0].set_ylabel('GazeY (m)', fontsize=17), axs[4,0].set_ylim(0.2, 0.4), axs[4,0].set_yticks([0.2, 0.3, 0.4])
+axs[5,0].plot(t1v,x1v,c='k'), axs[5,0].set_ylabel('GazeX (m)', fontsize=17), axs[5,0].set_ylim(-0.21, 0), axs[5,0].set_yticks([-0.2, -0.1, 0]),  axs[5,0].set_xlabel('Time (s)', fontsize=17)
 
 # B 1
-axs[0,1].plot(t2b,y2b), axs[0,1].plot(t2b,by2, color='gray')#, axs[0,1].set_ylabel('Gaze Y')
-axs[1,1].plot(t2b,x2b), axs[1,1].plot(t2b,bx2, color='gray')#, axs[1,1].set_ylabel('Gaze X')
+axs[0,1].plot(t2b,y2b,c='k'), axs[0,1].plot(t2b,by2, c='gray', linestyle = '--')
+axs[1,1].plot(t2b,x2b,c='k'), axs[1,1].plot(t2b,bx2, c='gray', linestyle = '--')
 # B 2
-axs[2,1].plot(t2o,y2o)#, axs[2,1].set_ylabel('Gaze Y')
-axs[3,1].plot(t2o,x2o)#, axs[3,1].set_ylabel('Gaze X')
+axs[2,1].plot(t2o,y2o,c='k')
+axs[3,1].plot(t2o,x2o,c='k')
 # B 3 
-axs[4,1].plot(t2v,y2v)#, axs[4,1].set_ylabel('Gaze Y')
-axs[5,1].plot(t2v,x2v), axs[5,1].set_xlabel('Time (s)')#, axs[5,1].set_ylabel('Gaze X')
+axs[4,1].plot(t2v,y2v,c='k')
+axs[5,1].plot(t2v,x2v,c='k'), axs[5,1].set_xlabel('Time (s)', fontsize=17)
 
-axs[0,0].set_xlabel('Trial time (s)')
-#plt.tight_layout()
+#plt.text(0.5, 0.5, 'matplotlib', horizontalalignment='center',verticalalignment='center')#, transform=axs[0,0].transAxes)
+
+plt.tight_layout()
 fig.align_ylabels()
-#plt.savefig('./images/gaze_AB_vis.eps', format='eps')
+plt.savefig('./images/gaze_AB_vis2.eps', format='eps')
 plt.show()
 
 print("Process finished -- %s seconds --" % round((time.time() - start_time),2))
