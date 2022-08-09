@@ -114,11 +114,11 @@ def extract_dataframes(file, offset=0, encode='utf_8', set=1):
     
     # Since each exercise type has a different formatting norm the name of the files are used to differentiate
     if set == 1: 
-        if file[14] == 'B': offset=6
-        elif file[14] == 'O' or file[14] == 'V': offset=3
+        if 'Ball' in file: offset=6
+        elif 'Object' in file or 'Visual' in file: offset=3
     if set == 2:
-        if file[16] == 'B': offset=6
-        elif file[16] == 'O' or file[16] == 'V': offset=3
+        if 'Ball' in file: offset=6
+        elif 'Object' in file or 'Visual' in file: offset=3
     # Dataframes
     dfs = []
     for i, j in enumerate(trials[:-1]):

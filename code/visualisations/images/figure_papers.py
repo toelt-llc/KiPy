@@ -1,13 +1,13 @@
 #!/usr/bin/env python3
 import sys
-from turtle import color
-sys.path.append('./animations/')
-import anim, time, pickle, blosc, os
+sys.path.append('../../')
+import time, pickle, blosc, os
 from csv_load import *
+
 
 start_time = time.time()
 
-DIR = "../files/pickles/2/"
+DIR = "../../../files/pickles/2/"
 FILES = []
 for root, dir, files in os.walk(DIR, topdown=False):
     for file in sorted(files):
@@ -42,7 +42,7 @@ for pickled_dfs in FILES[:-2]:
             ax2.set_xlabel('Trial time (s)')
             plt.tight_layout()
             fig.align_ylabels()
-            #plt.savefig('./images/gaze_XY2.eps', format='eps')
+            #plt.savefig('./paper/gaze_XY2.eps', format='eps')
             plt.show()
 
 print("Process finished -- %s seconds --" % round((time.time() - start_time),2))

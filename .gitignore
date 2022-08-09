@@ -12,9 +12,10 @@ docs/Presentation/Lecture Trends in Neurorehabilitation_22.03.22.pptx
 !code/animations/Ball*.mp4
 !code/animations/newfilter/*
 
-*/__pycache__/*
-code/load_test.py
-code/animations/plotly_test*
-code/animations/callback.py
+*/__pycache__/
+*.pyc
+code/0load_test.py
+code/visualisations/animations/plotly_test*
+code/visualisations/animations/callback.py
 
 .vscode/settings.json

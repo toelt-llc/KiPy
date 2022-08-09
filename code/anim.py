@@ -373,7 +373,7 @@ def armspeed(trial, plot=True, save=True, filename='arms_speed.svg'):
     plt.ylabel("Hand speed (m/s)")
     plt.legend()
     if save: 
-        path = './images/' + filename + '.svg'
+        path = filename + '.svg'
         plt.savefig(path)
     if plot: plt.show()
 

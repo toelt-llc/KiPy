@@ -2,9 +2,9 @@
 
 # Bash script to convert all the CSVs to UTF8 formatting
 
-cd ../files/
-mkdir -p ../files/utf8
-for f in ../files/set1*; do
+#cd ../../files/
+mkdir -p ../../files/utf8
+for f in ../../files/set1*; do
     mv "$f" "${f// /_}" #remove spaces
     ENCODE=$(file  $f | awk '{print $2}')
     echo $f

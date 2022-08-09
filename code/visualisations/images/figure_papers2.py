@@ -1,18 +1,17 @@
 #!/usr/bin/env python3
 import sys
-from turtle import color
-sys.path.append('./animations/')
-import anim, time, pickle, blosc, os
+sys.path.append('../../')
+import time, pickle, blosc, os
 from csv_load import *
 
 start_time = time.time()
 
-trial1_ball = '../files/pickles/1/Ball_on_Bar_-_Child_-_RIGHT_-_11_59.pickle'
-trial2_ball = '../files/pickles/2/Ball_on_Bar_-_Child_-_RIGHT_-_10_21.pickle'
-trial1_obj = '../files/pickles/1/Object_Hit_-_Child_-_RIGHT_-_12_02.pickle'
-trial2_obj = '../files/pickles/2/Object_Hit_-_Child_-_RIGHT_-_10_28.2.pickle'
-trial1_vis = '../files/pickles/1/Visually_Guided_Reaching_-_Child_v2_(4_target)_-_LEFT_-_11_50.pickle'
-trial2_vis = '../files/pickles/2/Visually_Guided_Reaching_-_Child__4_target_-_LEFT_-_10_06.pickle'
+trial1_ball = '../../../files/pickles/1/Ball_on_Bar_-_Child_-_RIGHT_-_11_59.pickle'
+trial2_ball = '../../../files/pickles/2/Ball_on_Bar_-_Child_-_RIGHT_-_10_21.pickle'
+trial1_obj = '../../../files/pickles/1/Object_Hit_-_Child_-_RIGHT_-_12_02.pickle'
+trial2_obj = '../../../files/pickles/2/Object_Hit_-_Child_-_RIGHT_-_10_28.2.pickle'
+trial1_vis = '../../../files/pickles/1/Visually_Guided_Reaching_-_Child_v2_(4_target)_-_LEFT_-_11_50.pickle'
+trial2_vis = '../../../files/pickles/2/Visually_Guided_Reaching_-_Child__4_target_-_LEFT_-_10_06.pickle'
 
 with open(trial1_ball, "rb") as f1, open(trial2_ball, 'rb') as f2, open(trial1_obj, "rb") as f3, open(trial2_obj, 'rb') as f4, open(trial1_vis, "rb") as f5, open(trial2_vis, 'rb') as f6:
     compressed_pickle1, compressed_pickle2, compressed_pickle3, compressed_pickle4, compressed_pickle5, compressed_pickle6 = f1.read(), f2.read(), f3.read(), f4.read(), f5.read(), f6.read()
@@ -66,7 +65,7 @@ axs[5,1].plot(t2v,x2v,c='k'), axs[5,1].set_xlabel('Time (s)', fontsize=17)
 
 plt.tight_layout()
 fig.align_ylabels()
-plt.savefig('./images/gaze_AB_vis2.eps', format='eps')
+plt.savefig('./paper/gaze_AB_vis2.eps', format='eps')
 plt.show()
 
 print("Process finished -- %s seconds --" % round((time.time() - start_time),2))

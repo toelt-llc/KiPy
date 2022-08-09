@@ -1,8 +1,7 @@
 #!/usr/bin/env python3
 import sys
-from turtle import color
-sys.path.append('./animations/')
-import anim, time, pickle, blosc, os
+sys.path.append('../../')
+import time, pickle, blosc
 from csv_load import *
 
 # Filter application on ball on bar
@@ -23,9 +22,9 @@ def medfilt(df, f):
 
 start_time = time.time()
 
-trial1_ball = '../files/pickles/1/Ball_on_Bar_-_Child_-_RIGHT_-_11_59.pickle'
-trial2_ball = '../files/pickles/2/Ball_on_Bar_-_Child_-_RIGHT_-_10_21.pickle'
-trial4_ball = '../files/pickles/2/Ball_on_Bar_-_Child_-_RIGHT_-_10_25.pickle'
+trial1_ball = '../../../files/pickles/1/Ball_on_Bar_-_Child_-_RIGHT_-_11_59.pickle'
+trial2_ball = '../../../files/pickles/2/Ball_on_Bar_-_Child_-_RIGHT_-_10_21.pickle'
+trial4_ball = '../../../files/pickles/2/Ball_on_Bar_-_Child_-_RIGHT_-_10_25.pickle'
 
 with open(trial4_ball, "rb") as f:
     compressed_pickle = f.read()
@@ -76,7 +75,7 @@ elif style == 'double':
 ax4.set_xlabel('Trial time (s)', fontsize=17), ax5.set_xlabel('Trial time (s)', fontsize=17), ax6.set_xlabel('Trial time (s)', fontsize=17)
 plt.tight_layout()
 fig.align_ylabels()
-plt.savefig('./images/gaze_filter.eps', format='eps')
+plt.savefig('./paper/gaze_filter.eps', format='eps')
 plt.show()
 
 print("Process finished -- %s seconds --" % round((time.time() - start_time),2))

@@ -1,22 +1,23 @@
 #!/usr/bin/env python3
-import anim, sys, time
+import sys, time
+sys.path.append('../../')
+import anim
 from csv_load import *
-sys.path.append('./animations/')
 
 start_time = time.time()
 
-reaching = "../files/utf8/Visually_Guided_Reaching_-_[Child_v2_-_practice]_-_LEFT_-_11_49.csv"
-reaching2 = "../files/utf8/Visually_Guided_Reaching_-_Child_v2_(4_target)_-_LEFT_-_11_50.csv"
-practice_ball = "../files/utf8/Ball_on_Bar_-_[Child_-_practice_2_(30s_per_level)]_-_RIGHT_-_11_57.csv"
-ball = "../files/utf8/Ball_on_Bar_-_Child_-_RIGHT_-_11_59.csv"
-practice_object = "../files/utf8/Object_Hit_-_[Child_-_practice]_-_RIGHT_-_12_02.csv"
+reaching = "../../../files/utf8/Visually_Guided_Reaching_-_[Child_v2_-_practice]_-_LEFT_-_11_49.csv"
+reaching2 = "../../../files/utf8/Visually_Guided_Reaching_-_Child_v2_(4_target)_-_LEFT_-_11_50.csv"
+practice_ball = "../../../files/utf8/Ball_on_Bar_-_[Child_-_practice_2_(30s_per_level)]_-_RIGHT_-_11_57.csv"
+ball = "../../../files/utf8/Ball_on_Bar_-_Child_-_RIGHT_-_11_59.csv"
+practice_object = "../../../files/utf8/Object_Hit_-_[Child_-_practice]_-_RIGHT_-_12_02.csv"
 
 EXERCISE = reaching
 dfs = extract_dataframes(EXERCISE)
 print("The input file contains {} trials.".format(len(dfs)))
 
 for i in range(len(dfs)):
-    trial = Trial(dfs[i], EXERCISE[14:24] + str(i), filter=None)
+    trial = Trial(dfs[i], EXERCISE[20:29] + str(i), filter=None)
     #print(trial.events) # Outputs the dic of events, with starting frame and starting second
     #print(trial.event_mean) #Outputs the mean of the events duration for the given trial, also computes std
 
