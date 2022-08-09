@@ -4,11 +4,11 @@ import matplotlib.pyplot as plt
 from matplotlib.animation import FuncAnimation
 
 # Trial module automatically loads the CSVs as dataframes and export the desired columns.
-# Future parameters will be added when needed for analysis.  
+# Future kinematics parameters will be added when needed for analysis.  
 
 class Trial:
-    """ Trial class used to save the general info, kinematics and events list for a given trial from a dataframe.
-        Dataframe are extracted from the raw CSVs, selected columns are read. 
+    """ Trial class used to save and load the complete information, kinematics and events list for a given trial from a dataframe.
+        Dataframe are extracted from the raw CSVs, selected kinematics and parameters columns are read. 
     """
     def __init__(self, df, name, filter) -> None: 
         self.name = name  # variable to keep track of the exercise 
@@ -83,8 +83,8 @@ class Kinematics:
         self.values = {}
         self.values['gaze_x'] = [float(i) for i in df['Gaze_X']]
         self.values['gaze_y'] = [float(i) for i in df['Gaze_Y']]
-        self.values['filtered_x'], _ = medfilt(df, filter)
-        _, self.values['filtered_y'] = medfilt(df, filter)
+        if filter:
+            self.values['filtered_x'], self.values['filtered_y'] = medfilt(df, filter)
         self.values['right_x'] = list(df['Right: Hand position X'])
         self.values['right_y'] = list(df['Right: Hand position Y'])
         self.values['right_spd'] = list(df['Right: Hand speed'])
@@ -100,7 +100,8 @@ class Kinematics:
 
 
 def extract_dataframes(file, offset=0, encode='utf_8', set=1):
-    """ Extracts the trials from the raw csv as dataframes. Outputs a list of pd dataframes. 
+    """ Extracts each individual trials from the raw csv file as individual pd dataframes. 
+        Outputs a list of pd dataframes. 
     """
     # Trial line detection
     trials = []
@@ -108,7 +109,8 @@ def extract_dataframes(file, offset=0, encode='utf_8', set=1):
         for cnt, line in enumerate(infile):
             if "Trial #" in line:
                 trials.append(cnt)
-        trials.append(cnt + 17)  #process = subprocess.Popen(["wc", "-l", EXERCISE])#, "copy.sh"]) #-> compares the count with sh and py
+        trials.append(cnt + 17)
+    #process = subprocess.Popen(["wc", "-l", EXERCISE])#, "copy.sh"]) #-> compares the dataframe lenth count with sh and py 
     
     # Since each exercise type has a different formatting norm the name of the files are used to differentiate
     if set == 1: 
@@ -125,7 +127,7 @@ def extract_dataframes(file, offset=0, encode='utf_8', set=1):
     return dfs
 
 def stat(series):
-    """ Used to compute the mean/std duration of similar events, eg. mean duration of saccades"""
+    """ Used to compute the mean(+std) duration of similar events, eg. mean(+std) duration of saccades"""
     ## TODO: for max and min
     lst = []
     if len(series) > 0: # avoids 0 divisions
@@ -140,12 +142,13 @@ def medfilt(df, f):
         df: raw dataframe
         f: filter size, in both directions
     """
-    #newdf = pd.DataFrame()
+    # Note: when ran on arrays made only of NaNs, nanmedian outputs NaN
     arrx, arry = [], []
-    if f:
-        for i in range(len(df)):
-            arrx.append(np.nanmedian(df['Gaze_X'][i-f:i+f]))    ## When ran on NaNs only arrays nanmedian outputs NaN
+    for i in range(len(df)):
+        if not np.isnan(df['Gaze_X'][i]):
+            arrx.append(np.nanmedian(df['Gaze_X'][i-f:i+f]))   
             arry.append(np.nanmedian(df['Gaze_Y'][i-f:i+f]))
-    # newdf['X filter'], newdf['Y filter'] = arrx, arry
-    # newdf['Frame time (s)'] = df['Frame time (s)']
+        else:
+            arrx.append(np.nanmedian(df['Gaze_X'][i]))
+            arry.append(np.nanmedian(df['Gaze_Y'][i]))
     return arrx, arry

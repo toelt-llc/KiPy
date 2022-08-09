@@ -4,10 +4,11 @@ import matplotlib.pyplot as plt
 from matplotlib.animation import FuncAnimation
 
 # Trial module automatically loads the CSVs as dataframes and export the desired columns.
-# Future parameters will be added when needed for analysis.  
+# Future kinematics parameters will be added when needed for analysis.  
 
 class Trial:
-    """
+    """ Trial class used to save and load the complete information, kinematics and events list for a given trial from a dataframe.
+        Dataframe are extracted from the raw CSVs, selected kinematics and parameters columns are read. 
     """
     def __init__(self, df, name, filter) -> None: 
         self.name = name  # variable to keep track of the exercise 
@@ -30,12 +31,12 @@ class Trial:
         #self.plot = self.plots()
 
     def plot_movements(self,name="fig_default.png", save=False, show=True):
-        fig = plt.figure()
+        fig = plt.figure(figsize=(10,6))
         plt.plot(self.kinematics['right_x'],self.kinematics['right_y'],'ro', label='right')
         plt.plot(self.kinematics['left_x'],self.kinematics['left_y'],'bo', label='left')
         plt.plot(self.kinematics['gaze_x'],self.kinematics['gaze_y'],'go', label='gaze')
-        plt.xlim([-0.5,0.5])
-        plt.ylim([0,1])
+        plt.xlim([-0.5,0.5]), plt.xlabel("X position (m)")
+        plt.ylim([0,1]), plt.ylabel("Y position (m)")
         plt.legend()
         plt.title("Summary plot. Duration : " + str(self.duration))
 
@@ -82,8 +83,8 @@ class Kinematics:
         self.values = {}
         self.values['gaze_x'] = [float(i) for i in df['Gaze_X']]
         self.values['gaze_y'] = [float(i) for i in df['Gaze_Y']]
-        self.values['filtered_x'], _ = medfilt(df, filter)
-        _, self.values['filtered_y'] = medfilt(df, filter)
+        if filter:
+            self.values['filtered_x'], self.values['filtered_y'] = medfilt(df, filter)
         self.values['right_x'] = list(df['Right: Hand position X'])
         self.values['right_y'] = list(df['Right: Hand position Y'])
         self.values['right_spd'] = list(df['Right: Hand speed'])
@@ -95,11 +96,12 @@ class Kinematics:
         try: 
             self.values['ball_x'] = list(df['x_ball_pos'])
             self.values['ball_y'] = list(df['y_ball_pos'])
-        except: print('')
+        except: print('',end='')
 
 
 def extract_dataframes(file, offset=0, encode='utf_8', set=1):
-    """ Extracts the trials from the raw csv as dataframes. Outputs a list of pd dataframes. 
+    """ Extracts each individual trials from the raw csv file as individual pd dataframes. 
+        Outputs a list of pd dataframes. 
     """
     # Trial line detection
     trials = []
@@ -107,7 +109,8 @@ def extract_dataframes(file, offset=0, encode='utf_8', set=1):
         for cnt, line in enumerate(infile):
             if "Trial #" in line:
                 trials.append(cnt)
-        trials.append(cnt + 17)  #process = subprocess.Popen(["wc", "-l", EXERCISE])#, "copy.sh"]) #-> compares the count with sh and py
+        trials.append(cnt + 17)
+    #process = subprocess.Popen(["wc", "-l", EXERCISE])#, "copy.sh"]) #-> compares the dataframe lenth count with sh and py 
     
     # Since each exercise type has a different formatting norm the name of the files are used to differentiate
     if set == 1: 
@@ -124,25 +127,28 @@ def extract_dataframes(file, offset=0, encode='utf_8', set=1):
     return dfs
 
 def stat(series):
-    """ Used to compute the mean/std duration of similar events, eg. mean duration of saccades"""
+    """ Used to compute the mean(+std) duration of similar events, eg. mean(+std) duration of saccades"""
     ## TODO: for max and min
     lst = []
-    for i in range(0, len(series)-1, 2):
-        lst.append(series[i+1][0] - series[i][0])   # 0: duration in frames, 1: duration in seconds
-    arr = np.array(lst)
+    if len(series) > 0: # avoids 0 divisions
+        for i in range(0, len(series)-1, 2):
+            lst.append(series[i+1][1] - series[i][1])   # 0: duration in frames, 1: duration in seconds
+        arr = np.array(lst)
 
-    return round(np.mean(arr),2), round(np.std(arr),2) 
+        return round(np.mean(arr),2), round(np.std(arr),2) 
 
 def medfilt(df, f):
-            """ df: raw dataframe
-                f: filter size, in both directions
-            """
-            #newdf = pd.DataFrame()
-            arrx, arry = [], []
-            for i in range(len(df)):
-                arrx.append(np.nanmedian(df['Gaze_X'][i-f:i+f]))
-                arry.append(np.nanmedian(df['Gaze_Y'][i-f:i+f]))
-            # newdf['X filter'], newdf['Y filter'] = arrx, arry
-            # newdf['Frame time (s)'] = df['Frame time (s)']
-
-            return arrx, arry
+    """ Output the median filtered series from gazeX and Y 
+        df: raw dataframe
+        f: filter size, in both directions
+    """
+    # Note: when ran on arrays made only of NaNs, nanmedian outputs NaN
+    arrx, arry = [], []
+    for i in range(len(df)):
+        if not np.isnan(df['Gaze_X'][i]):
+            arrx.append(np.nanmedian(df['Gaze_X'][i-f:i+f]))   
+            arry.append(np.nanmedian(df['Gaze_Y'][i-f:i+f]))
+        else:
+            arrx.append(np.nanmedian(df['Gaze_X'][i]))
+            arry.append(np.nanmedian(df['Gaze_Y'][i]))
+    return arrx, arry
