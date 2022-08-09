@@ -2,18 +2,20 @@
 
 Author: Arnaud Gucciardi, (C) 2022 A. Gucciardi
 
-This repository contains the KiPy software. It is better described in the paper
+This repository contains the KiPy software. The software is described in the paper, along with the eperimental setup:
 
-_A New Median Filter Approach to Deal with Large Windows of Missing Data in Eye-gaze Measurements_
-Arnaud Gucciardi, Monica Crotti, Nofar Ben Itzhak, Lisa Mailleux, Els Ortibus, and Umberto Michelucci
+_A New Median Filter Approach to Deal with Large Windows of Missing Data in Eye-gaze Measurements_  
+Arnaud Gucciardi, Monica Crotti, Nofar Ben Itzhak, Lisa Mailleux, Els Ortibus, Umberto Michelucci, Vida Groznik and Alexander Sadikov.
 
 In case you use it a reference to this paper will be nice.
 
-<!--This folder contains the data processing exploration from the project shared with KU Leuven.  -->
+
 
 # Background
 
-The software will help assessing cerebral palsy and other possible brain damages in children aged 7 to 15, thanks to a non-invasive tool.  
+The software helps assessing cerebral palsy and other possible brain damages in children aged 7 to 15, thanks to a non-invasive tool.  
+The technical tool ([Kinarm exoskeleton lab](https://kinarm.com/kinarm-products/kinarm-exoskeleton-lab/)) used in the clinical experiments is not presented here. 
+The software focuses on the analysis of output files and results.   
 Research Objectives :  
 1. Visual functions assessment.  
 2. Visual impact on manual control -> from the **task experiments**.  
@@ -23,7 +25,7 @@ This software is the basis for the 3 tasks.
 
 # Brief Description
 
-We use data extracted from the Kinarm software as CSV files.   4 different type of tasks are available.  
+We use data extracted from the Kinarm software as CSV files.  4 different types of files are available, from the 4 different experimental tasks.  
 The goal is to extract the experiments measurements from these files. Then, from the measures we study what is possible to obtain in terms of statistics and graphical representation.  
 The statistics on the measure can be further used for the analysis of evaluation parameters, linked to the research questions.  
 
@@ -33,7 +35,7 @@ The statistics on the measure can be further used for the analysis of evaluation
 # Concept
 In our part of the project we focus on the reading of the csv files: what can we extract that the software does not produces.  
 <!-- With the research problematics in head  -->
-To produce visualisations and to compute statistic we need to access both the hand positions data and the gaze tracking data. 
+To produce visualisations and to compute statistic we (mainly) need to access both the hand positions data and the gaze tracking data. 
 
 <!--## Results  
 *What was down with the raw CSVs and what can we learn from them.*   
@@ -47,25 +49,21 @@ To produce visualisations and to compute statistic we need to access both the ha
 -->
 ## Running the code
 
-To run the code a basic installation of python is needed, further details are in the [Code readme](https://github.com/toelt-llc/RESEARCH-gaze-kuleuven/tree/main/code#readme)
+To run the code a basic installation of python is needed, further details are in the [Code Readme](https://github.com/toelt-llc/RESEARCH-gaze-kuleuven/tree/main/code#readme)
 
-### Walkthrough file (move to code/README.md ?)
-This [notebook](https://github.com/toelt-llc/gaze-kuleuven/blob/main/code/nb_walkthrough.ipynb) contains an overview of what was done at first, without getting deep in the python code.  
-The [second notebook](https://github.com/toelt-llc/RESEARCH-gaze-kuleuven/blob/main/code/processing_flicker.ipynb) goes through the second part of this work where we try to filter and compute results out of flickering data.  
-## Content
+## Repository content
 ### code 
 Contains:
-- walkthrough (and experimental) notebooks & scripts, detailed in the [Code readme](https://github.com/toelt-llc/RESEARCH-gaze-kuleuven/tree/main/code#readme).
-- **animations**, possible animations of gaze/hands data.  
-See example above.  
+- walkthrough (and experimental) notebooks & scripts, detailed in the [Code Readme](https://github.com/toelt-llc/RESEARCH-gaze-kuleuven/tree/main/code#readme).
+- **animations**, animation module and examples of possible animations of gaze/hands data.  (See example above.)  
 - **bash_scripts**, pre-processing scripts used during csv exploration. 
 - **images**, possibles plots of gaze/hands data.
 ### docs
-Explanatory documents from Monica Crotti, with kinarm matlab sources, documentation and presentations.
+Explanatory documents from Monica Crotti, with additional Kinarm matlab sources, documentation and presentations.
 ### files
-Folder where the csv are stored, important for the path variable used in code.  
+CSV files storage, important for the path variable used in code.  
 Subfolders:  
-- *set1*, *set2*   : original CSVs in raw format (ISO-8859)
-- *utf8*, *utf8_2* : converted CSV files 
+- *set1*, *set2*   : original CSVs in raw format (ISO-8859).  
+- *utf8*, *utf8_2* : UTF8-converted CSV files. 
 
--- Documentation version: 06/2022 --
+-- Documentation version: 08/2022 --
