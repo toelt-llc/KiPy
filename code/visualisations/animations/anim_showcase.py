@@ -3,7 +3,7 @@ import sys, time
 sys.path.append('../../')
 import anim
 from csv_load import *
-
+# TODO: Use the compressed pickles instead of the raw CSV
 start_time = time.time()
 
 reaching = "../../../files/utf8/Visually_Guided_Reaching_-_[Child_v2_-_practice]_-_LEFT_-_11_49.csv"
@@ -23,7 +23,7 @@ for i in range(len(dfs)):
 
     # print(i, trial.count, trial.duration, trial.rate)
     anim.armspeed(trial, filename=trial.name)
-    #anim.animate_gaze_single(trial, plot=True, save=False, speed=10, filename=trial.name)
+    anim.animate_gaze_single(trial, plot=True, save=False, speed=10, filename=trial.name)
     #anim.animate_gaze_triple(trial, plot=True, save=False, speed=20, filename=trial.name)
     #anim.animate_all(trial, plot=True, save=False, speed=10)
 
