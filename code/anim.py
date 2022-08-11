@@ -1,6 +1,5 @@
 import os
 
-from sqlalchemy import false
 from csv_load import *
 from matplotlib import pyplot as plt
 from matplotlib import animation

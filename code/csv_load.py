@@ -11,7 +11,7 @@ class Trial:
         Dataframe are extracted from the raw CSVs, selected kinematics and parameters columns are read. 
     """
     def __init__(self, df, name, filter) -> None: 
-        self.name = name  # variable to keep track of the exercise 
+        self.name = name  # keep track of the exercise #attempt
         self.num = df.iloc[0][0]
         self.rate = df.iloc[0][3]
         self.count = df.iloc[0][4]
