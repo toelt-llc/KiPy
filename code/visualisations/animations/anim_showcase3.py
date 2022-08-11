@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-import time, sys, warnings
+import time, sys, warnings, pickle, blosc
 warnings.filterwarnings(action='ignore', category=RuntimeWarning)
 sys.path.append('../../')
 import anim
@@ -8,15 +8,19 @@ from csv_load import *
 # anim_showcase complete list, from paper appendix
 start_time = time.time()
 
-reaching = "../../../files/utf8/Visually_Guided_Reaching_-_[Child_v2_-_practice]_-_LEFT_-_11_49.csv"
-reaching2 = "../../../files/utf8/Visually_Guided_Reaching_-_Child_v2_(4_target)_-_LEFT_-_11_50.csv"
-practice_ball = "../../../files/utf8/Ball_on_Bar_-_[Child_-_practice_2_(30s_per_level)]_-_RIGHT_-_11_57.csv"
-ball = "../../../files/utf8/Ball_on_Bar_-_Child_-_RIGHT_-_11_59.csv"
-practice_object = "../../../files/utf8/Object_Hit_-_[Child_-_practice]_-_RIGHT_-_12_02.csv"
+reaching = "../../../files/pickles/1/Visually_Guided_Reaching_-_[Child_v2_-_practice]_-_LEFT_-_11_49.pickle"
+reaching2 = "../../../files/pickles/1/Visually_Guided_Reaching_-_Child_v2_(4_target)_-_LEFT_-_11_50.pickle"
+practice_ball = "../../../files/pickles/1/Ball_on_Bar_-_[Child_-_practice_2_(30s_per_level)]_-_RIGHT_-_11_57.pickle"
+ball = "../../../files/pickles/1/Ball_on_Bar_-_Child_-_RIGHT_-_11_59.pickle"
+practice_object = "../../../files/pickles/1/Object_Hit_-_[Child_-_practice]_-_RIGHT_-_12_02.pickle"
 
 #EXERCISE = '<source file location>'
+#dataframes = extract_dataframes(EXERCISE)
 EXERCISE = ball
-dataframes = extract_dataframes(EXERCISE)
+with open(EXERCISE, "rb") as f:
+    compressed_pickle = f.read()
+
+dataframes = pickle.loads(blosc.decompress(compressed_pickle))
 print("The input file contains {} trials.".format(len(dataframes)))
 
 for i in range(len(dataframes)):                                            # For each trial contained in the source file.
