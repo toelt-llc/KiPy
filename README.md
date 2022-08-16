@@ -30,7 +30,7 @@ The goal is to extract the experiments measurements from these files. Then, from
 The statistics on the measure can be further used for the analysis of evaluation parameters, linked to the research questions.  
 
 ***Figure 1: Representation example***  
-![Whole anim](https://github.com/toelt-llc/gaze-kuleuven/blob/main/code/animations/final/convertedall.gif) 
+![Whole anim](https://github.com/toelt-llc/RESEARCH-gaze-kuleuven/blob/main/code/visualisations/animations/final/convertedall.gif) 
 
 # Concept
 In our part of the project we focus on the reading of the csv files: what can we extract that the software does not produces.  
@@ -55,8 +55,8 @@ To run the code a basic installation of python is needed, further details are in
 ### code 
 Contains:
 - walkthrough (and experimental) notebooks & scripts, detailed in the [Code Readme](https://github.com/toelt-llc/RESEARCH-gaze-kuleuven/tree/main/code#readme).
-- **animations**, animation module and examples of possible animations of gaze/hands data.  (See example above.)  
 - **bash_scripts**, pre-processing scripts used during csv exploration. 
+- **animations**, animation module and examples of possible animations of gaze/hands data.  (See example above.)  
 - **images**, possibles plots of gaze/hands data.
 ### docs
 Explanatory documents from Monica Crotti, with additional Kinarm matlab sources, documentation and presentations.
