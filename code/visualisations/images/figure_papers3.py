@@ -50,7 +50,7 @@ b = False
 style = 'triple'
 
 if style == 'triple': 
-    fig, ((ax1, ax2, ax3),(ax4, ax5, ax6)) = plt.subplots(2,3, sharex=True, sharey='row', figsize= (15,10))
+    fig, ((ax1, ax2, ax3),(ax4, ax5, ax6)) = plt.subplots(2,3, sharex=True, sharey='row', figsize= (13,9))
     #normal
     ax1.plot(t,y, c='k', alpha=0.8), ax1.set_ylabel('GazeY source (m)', fontsize=17)
     ax4.plot(t,x, c='k', alpha=0.8), ax4.set_ylabel('GazeX source (m)', fontsize=17)
