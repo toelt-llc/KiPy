@@ -4,7 +4,7 @@ Author: Arnaud Gucciardi, (C) 2022 A. Gucciardi
 
 This repository contains the KiPy software. The software is described in the paper, along with the eperimental setup:
 
-_A New Median Filter Approach to Deal with Large Windows of Missing Data in Eye-gaze Measurements_  
+_A New Median Filter Application to Deal with Large Windows of Missing Data in Eye-gaze Measurements_ (2022)
 Arnaud Gucciardi, Monica Crotti, Nofar Ben Itzhak, Lisa Mailleux, Els Ortibus, Umberto Michelucci, Vida Groznik and Alexander Sadikov.
 
 In case you use it a reference to this paper will be nice.
