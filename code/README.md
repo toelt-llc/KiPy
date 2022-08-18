@@ -33,6 +33,7 @@ Currently a single smaller file from a *Visually Guided Reaching* task is saved 
 The files are annoted large csv tables containing the kinematics informations from each experiments.  In the files the trials are individually separated.  Some experiments contain one single long trial (eg. the *Ball On Bar* exercise) and others contain several shorter trials.  A trial is considered as an individual attempt to complete one task.  Additionaly, the files also contain detailed experiments setup data. This data is removed during the pre-processing step in order to save only the dataframe containing the timed kinematics for a given trial.  
 
 ## Content
+Due to privacy security, the raw data files cannot be accessed publicly and therefore are not available in the repository. The extracted dataframes are stored and compressed with the pickle library. The notebooks display example usage and analysis. 
 
 **Modules**  
 *anim.py* Module containing the various animations methods used in notebooks and scripts.  
@@ -52,7 +53,7 @@ The files are annoted large csv tables containing the kinematics informations fr
 **Directories**  
 -[Bash Scripts](https://github.com/toelt-llc/RESEARCH-gaze-kuleuven/tree/main/code/bash_scripts):  
 Contains bash scripts used for the handling and conversion of the CSV files. No further use.  
--[Visualisations](https://github.com/toelt-llc/RESEARCH-gaze-kuleuven/tree/main/code/visualisations):  
+-[Visualisations](https://github.com/toelt-llc/RESEARCH-gaze-kuleuven/tree/main/code/visualisations):
 Contains the *animations* and *images* subfolders for practical visualisations. Each folder contains scripts to output the graphical representations. The *animations* subfolder contains results of the animation module. Animations saved from the *anim_showcase* scripts are saved here in subfolders.  
 The *images* subfolder contains visualizations for differents parameters. Images are also obtained from the scripts.  
 
