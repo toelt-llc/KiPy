@@ -3,12 +3,16 @@ import pandas as pd
 import matplotlib.pyplot as plt
 from matplotlib.animation import FuncAnimation
 
-# Trial module automatically loads the CSVs as dataframes and export the desired columns.
-# Future kinematics parameters will be added when needed for analysis.  
+# The Trial class forms the core of the data extraction from the CSV files. 
+# On initialisation, the Python class requires a Pandas DataFrame as input. 
+# Each task trial from the CSV files is represented as a dataframe. 
+# The most fundamental properties needed are: trial duration, frame count, the kinematics features, and the events. 
+# The Trial class uses the attributes of both the Kinematics and Events classes to regroup the information available for a given exercise. 
 
 class Trial:
     """ Trial class used to save and load the complete information, kinematics and events list for a given trial from a dataframe.
         Dataframe are extracted from the raw CSVs, selected kinematics and parameters columns are read. 
+        Future kinematics parameters will be added when needed for analysis. 
     """
     def __init__(self, df, name, filter) -> None: 
         self.name = name  # keep track of the exercise #attempt
@@ -63,6 +67,9 @@ class Trial:
 
 
 class Events:
+    """ Read and list all saccades and fixations registered in the Kinarm trial dataframe. 
+        Events are precisely listed as a dictionary, which in turn is called in the Trial superclass.
+    """
     def __init__(self, df) -> None:
         event_list = list(df[df['Event name'].notna()]['Event name'])
         self.event_list = event_list
@@ -79,6 +86,9 @@ class Events:
 
 
 class Kinematics:
+    """ Read and store all kinematics attributes, in a dictionary structure to save the values of the selected parameters.
+        The kiematics are then called as Trial.kinematics in the Trial superclass.
+    """
     def __init__(self, df, filter) -> None:
         self.values = {}
         self.values['gaze_x'] = [float(i) for i in df['Gaze_X']]
