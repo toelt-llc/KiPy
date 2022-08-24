@@ -33,21 +33,40 @@ df = pickle.loads(depressed_pickle)[0]  # only select first element of the list,
 #df = medfilt(df, 7)
 
 #anim.static_simple_medfilt(df, medfilt(df, 7), plot=True, save=False, filename='paperdraft')
-trial = Trial(df, 'default name', filter=70)
-trialbis = Trial(df, 'default name', filter=500)
+trial = Trial(df, 'default name', filter=75)
+trialbis = Trial(df, 'default name', filter=250)
+trialtri = Trial(df, 'default name', filter=500)
+
 x = trial.kinematics['gaze_x']
 y = trial.kinematics['gaze_y']
 fx = trial.kinematics['filtered_x']
 fy = trial.kinematics['filtered_y']
 fx2 = trialbis.kinematics['filtered_x']
 fy2 = trialbis.kinematics['filtered_y']
+fx3 = trialtri.kinematics['filtered_x']
+fy3 = trialtri.kinematics['filtered_y']
 t = trial.kinematics['frame_s']
 b = False
 # try:
 #     bx, by = trial.kinematics['ball_x'], trial.kinematics['ball_y']
 #     b = True
 # except: print("",end="")
-style = 'triple'
+style = 'quad'
+
+if style == 'quad': 
+    fig, ((ax1, ax2, ax3, ax4),(ax5, ax6, ax7, ax8)) = plt.subplots(2,4, sharex=True, sharey='row', figsize= (17,9))
+    #normal
+    ax1.plot(t,y, c='k', alpha=0.8), ax1.set_ylabel('GazeY (m)', fontsize=17), ax1.text(0.1,0.85,'Source', fontsize=17)
+    ax5.plot(t,x, c='k', alpha=0.8), ax5.set_ylabel('GazeX (m)', fontsize=17), ax5.text(0.1,0.45,'Source', fontsize=17)
+    #filter 1
+    ax2.plot(t,fy, alpha=0.8), ax2.text(0.1,0.85,'Filter: 150', fontsize=17)
+    ax6.plot(t,fx, alpha=0.8), ax6.text(0.1,0.45,'Filter: 150', fontsize=17)
+    #filter 2 
+    ax3.plot(t,fy2, alpha=0.8), ax3.text(0.1,0.85,'Filter: 500', fontsize=17)
+    ax7.plot(t,fx2, alpha=0.8), ax7.text(0.1,0.45,'Filter: 500', fontsize=17)
+    #filter 3 
+    ax4.plot(t,fy3, alpha=0.8), ax4.text(0.1,0.85,'Filter: 1000', fontsize=17)
+    ax8.plot(t,fx3, alpha=0.8), ax8.text(0.1,0.45,'Filter: 1000', fontsize=17)
 
 if style == 'triple': 
     fig, ((ax1, ax2, ax3),(ax4, ax5, ax6)) = plt.subplots(2,3, sharex=True, sharey='row', figsize= (13,9))
@@ -67,15 +86,17 @@ elif style == 'double':
     ax1.plot(t,y), ax1.set_ylabel('GazeY source (m)')
     ax3.plot(t,x), ax3.set_ylabel('GazeX source (m)')
     #filter
-    ax2.plot(t,fy), ax2.set_ylabel('GazeY filtered (m)')
-    ax4.plot(t,fx), ax4.set_ylabel('GazeX filtered (m)')
+    ax2.plot(t,fy), ax1.text(0.9,0.1,"GazeY filtered")
+    ax4.plot(t,fx), ax2.text(0.1,0.8,"GazeX filtered")
 # if b: 
 #     ax1.plot(t,by, color='lightgreen')
 #     ax2.plot(t,bx, color='lightgreen')
-ax4.set_xlabel('Trial time (s)', fontsize=17), ax5.set_xlabel('Trial time (s)', fontsize=17), ax6.set_xlabel('Trial time (s)', fontsize=17)
+ax5.set_xlabel('Trial time (s)', fontsize=17), ax6.set_xlabel('Trial time (s)', fontsize=17)
+ax7.set_xlabel('Trial time (s)', fontsize=17), ax8.set_xlabel('Trial time (s)', fontsize=17)
 plt.tight_layout()
 fig.align_ylabels()
-plt.savefig('./paper/gaze_filter.eps', format='eps')
+#plt.savefig('./paper/gaze_filter.eps', format='eps')
+fig.savefig('./paper/gaze_filter_4.png', format='png', dpi=1200)
 plt.show()
 
 print("Process finished -- %s seconds --" % round((time.time() - start_time),2))

@@ -12,10 +12,10 @@ FILES = []
 for root, dir, files in os.walk(DIR, topdown=False):
     for file in sorted(files):
         FILES.append(os.path.join(root, file))
-print(FILES)
+#print(FILES)
 
-for pickled_dfs in FILES[:-2]:
-    if pickled_dfs[19] == 'B':
+for pickled_dfs in FILES:
+    if pickled_dfs[25] == 'B':
         with open(pickled_dfs, "rb") as f:
             compressed_pickle = f.read()
         depressed_pickle = blosc.decompress(compressed_pickle)
