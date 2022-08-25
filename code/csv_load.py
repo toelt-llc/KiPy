@@ -162,3 +162,8 @@ def medfilt(df, f):
             arrx.append(np.nanmedian(df['Gaze_X'][i]))
             arry.append(np.nanmedian(df['Gaze_Y'][i]))
     return arrx, arry
+
+# Annexe
+def path_replace(path):
+    output  = path.replace('/', '\\')
+    return output
