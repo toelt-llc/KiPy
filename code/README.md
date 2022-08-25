@@ -1,28 +1,27 @@
 # Main python module directory
 
-## Description
-
 This core directory contains the programs and tests to analyse the CSV files and their trials.  
 The directory contains the modules to automatically extract the data columns for each trial, for any task.
 *Work In Progress* : Statistics module. 
 
+## Necessary dependencies
+
+Python ([Install python](https://www.python.org/downloads/)), with required libraries located in *requirements.txt*, libraries are loaded automatically with:  
+**Windows:** 
+```bash
+py -m pip install -r requirements.txt
+```  
+**linux/macOS:**
+```bash
+python -m pip install -r requirements.txt
+```
+
 ## Getting Started
 
-[Notebook Walkthrough](https://github.com/toelt-llc/gaze-kuleuven/blob/main/code/nb_walkthrough.ipynb) gets into the process of the csv reading and first visualisations.
-The [second Notebook](https://github.com/toelt-llc/RESEARCH-gaze-kuleuven/blob/main/code/processing_flicker.ipynb) goes through the second part of this work where we try to filter and compute results out of flickering/missing raw data.      
+[First Notebook](https://github.com/toelt-llc/gaze-kuleuven/blob/main/code/nb0_preprocessing.ipynb) first representation and access to the content of the files.  
+[Notebook Walkthrough](https://github.com/toelt-llc/gaze-kuleuven/blob/main/code/nb1_walkthrough.ipynb) gets into the details of the process of the csv reading and first visualisations.
+The [second Notebook](https://github.com/toelt-llc/RESEARCH-gaze-kuleuven/blob/main/code/nb2_flickeringdata.ipynb) goes through the second part of this work where we try to filter and compute results out of flickering/missing raw data.      
 Running an animation Example: see [Executing programs](https://github.com/toelt-llc/RESEARCH-gaze-kuleuven/tree/main/code#executing-programs)
-
-### Dependencies
-
-Python ([Install python](https://www.python.org/downloads/)), with libraries:
-- Required libraries: 
-    - jupyterlab, pandas, numpy, matplotlib, pickle, blosc
-    - From a python install do the following shell commands to install libraries:  
-```bash
-python -m pip install [library] 
-# for example :
-python -m pip install jupyterlab
-```
 
 ## Data source: 
 Stored in the [files](https://github.com/toelt-llc/RESEARCH-gaze-kuleuven/tree/main/files) folder.  
