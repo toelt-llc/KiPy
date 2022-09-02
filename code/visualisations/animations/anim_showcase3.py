@@ -1,10 +1,16 @@
 #!/usr/bin/env python3
 import time, sys, warnings, pickle, blosc
 warnings.filterwarnings(action='ignore', category=RuntimeWarning)
-sys.path.append('../../')
+
+# my_os=sys.platform
+# os_change=True
+# if my_os=='darwin' or my_os=='linux':
+#     os_change=False
+PATH = '../../'
+# if my_os: PATH = path_replace(PATH)
+sys.path.append(PATH)
 import anim
 from csv_load import *
-# TODO: Use the compressed pickles instead of the raw CSV
 # anim_showcase complete list, from paper appendix
 start_time = time.time()
 

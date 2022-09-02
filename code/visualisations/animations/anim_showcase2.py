@@ -1,7 +1,14 @@
 #!/usr/bin/env python3
 import time, sys, warnings, pickle, blosc, os
 warnings.filterwarnings(action='ignore', category=RuntimeWarning)
-sys.path.append('../../')
+
+# my_os=sys.platform
+# os_change=True
+# if my_os=='darwin' or my_os=='linux':
+#     os_change=False
+PATH = '../../'
+# if my_os: PATH = path_replace(PATH)
+sys.path.append(PATH)
 import anim
 from csv_load import *
 # NB: When ran on NaNs only arrays the medfilt function outputs NaNs
@@ -10,6 +17,7 @@ from csv_load import *
 # The median filtering function is illustrated with the static and animation functions from the anim module
 
 DIR = "../../../files/pickles/2/"
+#if my_os: DIR = path_replace(DIR)
 FILES = []
 for root, dir, files in os.walk(DIR, topdown=False):
 #    print(os.path.abspath(os.getcwd()))
