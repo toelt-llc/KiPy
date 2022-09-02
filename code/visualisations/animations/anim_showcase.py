@@ -22,16 +22,16 @@ EXERCISE = ball
 with open(EXERCISE, "rb") as f:
     compressed_pickle = f.read()
 
-dfs = pickle.loads(blosc.decompress(compressed_pickle))
-print("The input file contains {} trials.".format(len(dfs)))
+dataframes = pickle.loads(blosc.decompress(compressed_pickle))
+print("The input file contains {} trials.".format(len(dataframes)))
 
-for i in range(len(dfs)):
-    trial = Trial(dfs[i], EXERCISE[20:29] + str(i), filter=None)
+for i in range(len(dataframes)):
+    trial = Trial(dataframes[i], EXERCISE[25:29] + str(i), filter=None)
     #print(trial.events) # Outputs the dic of events, with starting frame and starting second
     #print(trial.event_mean) #Outputs the mean of the events duration for the given trial, also computes std
 
     # print(i, trial.count, trial.duration, trial.rate)
-    anim.armspeed(trial)
+    anim.armspeed(trial, save=False)
     anim.animate_gaze_single(trial, plot=True, save=False, speed=10)
     #anim.animate_gaze_triple(trial, plot=True, save=False, speed=20, filename=trial.name)
     #anim.animate_all(trial, plot=True, save=False, speed=10)

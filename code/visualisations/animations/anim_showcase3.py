@@ -26,7 +26,7 @@ dataframes = pickle.loads(blosc.decompress(compressed_pickle))
 print("The input file contains {} trials.".format(len(dataframes)))
 
 for i in range(len(dataframes)):                                            # For each trial contained in the source file.
-    trial = Trial(dataframes[i], name = EXERCISE + str(i), filter = None)
+    trial = Trial(dataframes[i], name = EXERCISE[25:29] + str(i), filter = None)
     #print(trial.events)                                                     # Outputs the dictionnary of events, with starting frame and starting second.
     #print(trial.event_mean)                                                 # Outputs the mean of the events duration for the given trial, also computes std.
 
