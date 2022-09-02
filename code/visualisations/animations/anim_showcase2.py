@@ -1,14 +1,10 @@
 #!/usr/bin/env python3
-import time, sys, warnings, pickle, blosc, os
+import time, os, sys, inspect, warnings, pickle, blosc
 warnings.filterwarnings(action='ignore', category=RuntimeWarning)
 
-# my_os=sys.platform
-# os_change=True
-# if my_os=='darwin' or my_os=='linux':
-#     os_change=False
-PATH = '../../'
-# if my_os: PATH = path_replace(PATH)
-sys.path.append(PATH)
+currentdir = os.path.dirname(os.path.abspath(inspect.getfile(inspect.currentframe())))
+codedir = os.path.dirname(os.path.dirname(currentdir))
+sys.path.append(codedir)
 import anim
 from csv_load import *
 # NB: When ran on NaNs only arrays the medfilt function outputs NaNs

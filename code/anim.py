@@ -1,10 +1,9 @@
 import os
-
 from csv_load import *
 from matplotlib import pyplot as plt
 from matplotlib import animation
 from scipy.ndimage import median_filter
-from alive_progress import alive_bar
+#from alive_progress import alive_bar
 
 # Module containing the animations methods
 

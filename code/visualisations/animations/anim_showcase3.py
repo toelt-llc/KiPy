@@ -1,14 +1,10 @@
 #!/usr/bin/env python3
-import time, sys, warnings, pickle, blosc
+import time, os, sys, inspect, warnings, pickle, blosc
 warnings.filterwarnings(action='ignore', category=RuntimeWarning)
 
-# my_os=sys.platform
-# os_change=True
-# if my_os=='darwin' or my_os=='linux':
-#     os_change=False
-PATH = '../../'
-# if my_os: PATH = path_replace(PATH)
-sys.path.append(PATH)
+currentdir = os.path.dirname(os.path.abspath(inspect.getfile(inspect.currentframe())))
+codedir = os.path.dirname(os.path.dirname(currentdir))
+sys.path.append(codedir)
 import anim
 from csv_load import *
 # anim_showcase complete list, from paper appendix
@@ -47,6 +43,3 @@ for i in range(len(dataframes)):                                            # Fo
     anim.animate_all(trial, plot=True, save=False, speed=10, filename=trial.name)
 
 print("Process finished -- %s seconds --" % round((time.time() - start_time),2))
-
-# Command to convert the videos to gifs
-#ffmpeg -i animation2_v3.mp4 -r 30 converted2.gif  
