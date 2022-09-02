@@ -362,7 +362,7 @@ def static_gaze_single_medfilt(trial, plot=True, save=True, filename='static_sin
         else: print("File already exists.")
     if plot: plt.show()
 
-def armspeed(trial, plot=True, save=True, filename='arms_speed.svg'):
+def armspeed(trial, plot=True, save=True, filename='arms_speed'):
     """ Function to plot the arms speed over time for a given trial
     """
     plt.plot(trial.kinematics['frame_s'], trial.kinematics['right_spd'], label='right arm')

@@ -3,4 +3,3 @@ numpy
 matplotlib
 blosc
 scipy
-pickle
