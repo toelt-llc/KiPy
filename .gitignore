@@ -33,3 +33,6 @@ code/visualisations/images/paper/gaze_XY2_2.png
 code/nb_test.ipynb
 code/all_position.png
 code/eye_position.png
+
+code/visualisations/gui/psgdemos/demo_programs
+code/visualisations/gui/psgdemos/__*
