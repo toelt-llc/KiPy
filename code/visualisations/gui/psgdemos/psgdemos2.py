@@ -465,38 +465,39 @@ def make_window():
         [sg.Text('Filter (F1):', tooltip=filter_tooltip), sg.Input(size=(25, 1), focus=True, enable_events=True, key='-FILTER-', tooltip=filter_tooltip),
          sg.T(size=(15,1), k='-FILTER NUMBER-')],
         [sg.Button('Run'), sg.B('Edit'), sg.B('Clear'), sg.B('Open Folder'), sg.B('Copy Path')],
-        [sg.Text('Find (F2):', tooltip=find_tooltip), sg.Input(size=(25, 1), enable_events=True, key='-FIND-', tooltip=find_tooltip),
-         sg.T(size=(15,1), k='-FIND NUMBER-')],
+        #[sg.Text('Find (F2):', tooltip=find_tooltip), sg.Input(size=(25, 1), enable_events=True, key='-FIND-', tooltip=find_tooltip),sg.T(size=(15,1), k='-FIND NUMBER-')],
     ], element_justification='l', expand_x=True, expand_y=True)
 
-    lef_col_find_re = sg.pin(sg.Col([
-        [sg.Text('Find (F3):', tooltip=find_re_tooltip), sg.Input(size=(25, 1),key='-FIND RE-', tooltip=find_re_tooltip),sg.B('Find RE')]], k='-RE COL-'))
+    #lef_col_find_re = sg.pin(sg.Col([ [sg.Text('Find (F3):', tooltip=find_re_tooltip), sg.Input(size=(25, 1),key='-FIND RE-', tooltip=find_re_tooltip),sg.B('Find RE')]], k='-RE COL-'))
 
     right_col = [
-        [sg.Multiline(size=(70, 21), write_only=True, expand_x=True, expand_y=True, key=ML_KEY, reroute_stdout=True, echo_stdout_stderr=True, reroute_cprint=True)],
+        [sg.Multiline(size=(10, 14), write_only=True, expand_x=True, expand_y=True, key=ML_KEY, reroute_stdout=True, echo_stdout_stderr=True, reroute_cprint=True)],
         [sg.B('Settings'), sg.Button('Exit')],
-        [sg.T('Demo Browser Ver ' + __version__)],
+        #[sg.T('Demo Browser Ver ' + __version__)],
         [sg.T('PySimpleGUI ver ' + sg.version.split(' ')[0] + '  tkinter ver ' + sg.tclversion_detailed, font='Default 8', pad=(0,0))],
-        [sg.T('Python ver ' + sys.version, font='Default 8', pad=(0,0))],
+        #[sg.T('Python ver ' + sys.version, font='Default 8', pad=(0,0))],
         [sg.T('Interpreter ' + sg.execute_py_get_interpreter(), font='Default 8', pad=(0,0))],
     ]
 
-    options_at_bottom = sg.pin(sg.Column([[sg.CB('Verbose', enable_events=True, k='-VERBOSE-', tooltip='Enable to see the matches in the right hand column'),
-                         sg.CB('Show only first match in file', default=True, enable_events=True, k='-FIRST MATCH ONLY-', tooltip='Disable to see ALL matches found in files'),
+    options_at_bottom = sg.pin(sg.Column([[
+                         #sg.CB('Verbose', enable_events=True, k='-VERBOSE-', tooltip='Enable to see the matches in the right hand column'),
+                         #sg.CB('Show only first match in file', default=True, enable_events=True, k='-FIRST MATCH ONLY-', tooltip='Disable to see ALL matches found in files'),
                          sg.CB('Find ignore case', default=True, enable_events=True, k='-IGNORE CASE-'),
                          sg.CB('Wait for Runs to Complete', default=False, enable_events=True, k='-WAIT-'),
                          sg.CB('Show ALL file types', default=not python_only, enable_events=True, k='-SHOW ALL FILES-'),
                                            ]],
                                          pad=(0,0), k='-OPTIONS BOTTOM-',  expand_x=True, expand_y=False),  expand_x=True, expand_y=False)
 
-    choose_folder_at_top = sg.pin(sg.Column([[sg.T('Click settings to set top of your tree or choose a previously chosen folder'),
-                                       sg.Combo(sorted(sg.user_settings_get_entry('-folder names-', [])), default_value=sg.user_settings_get_entry('-demos folder-', ''), size=(50, 30), key='-FOLDERNAME-', enable_events=True, readonly=True)]], pad=(0,0), k='-FOLDER CHOOSE-'))
+    choose_folder_at_top = sg.pin(sg.Column([[
+                                    sg.T('Browse to change folder source'),
+                                    sg.Combo(sorted(sg.user_settings_get_entry('-folder names-', [])), default_value=sg.user_settings_get_entry('-demos folder-', ''), size=(50, 30), key='-FOLDERNAME-', enable_events=True, readonly=True), 
+                                    sg.FolderBrowse('Folder Browse', target='-FOLDERNAME-')]], pad=(0,0), k='-FOLDER CHOOSE-'))
     # ----- Full layout -----
 
     layout = [[sg.Text('PySimpleGUI Demo Program & Project Browser', font='Any 20')],
               [choose_folder_at_top],
               # [sg.Column([[left_col],[ lef_col_find_re]], element_justification='l',  expand_x=True, expand_y=True), sg.Column(right_col, element_justification='c', expand_x=True, expand_y=True)],
-              [sg.Pane([sg.Column([[left_col],[ lef_col_find_re]], element_justification='l',  expand_x=True, expand_y=True), sg.Column(right_col, element_justification='c', expand_x=True, expand_y=True) ], orientation='h', relief=sg.RELIEF_SUNKEN, expand_x=True, expand_y=True, k='-PANE-')],
+              [sg.Pane([sg.Column([[left_col]], element_justification='l',  expand_x=True, expand_y=True), sg.Column(right_col, element_justification='c', expand_x=True, expand_y=True) ], orientation='h', relief=sg.RELIEF_SUNKEN, expand_x=True, expand_y=True, k='-PANE-')],
               [options_at_bottom, sg.Sizegrip()]]
 
     # --------------------------------- Create Window ---------------------------------
@@ -508,8 +509,8 @@ def make_window():
     # window['-PANE-'].expand(True, True, True)
 
     window.bind('<F1>', '-FOCUS FILTER-')
-    window.bind('<F2>', '-FOCUS FIND-')
-    window.bind('<F3>', '-FOCUS RE FIND-')
+    #window.bind('<F2>', '-FOCUS FIND-')
+    #window.bind('<F3>', '-FOCUS RE FIND-')
     if not advanced_mode():
         window['-FOLDER CHOOSE-'].update(visible=False)
         window['-RE COL-'].update(visible=False)
@@ -621,16 +622,16 @@ def main():
             new_list = [i for i in file_list if values['-FILTER-'].lower() in i.lower()]
             window['-DEMO LIST-'].update(new_list)
             window['-FILTER NUMBER-'].update(f'{len(new_list)} files')
-            window['-FIND NUMBER-'].update('')
-            window['-FIND-'].update('')
-            window['-FIND RE-'].update('')
-        elif event == '-FOCUS FIND-':
-            window['-FIND-'].set_focus()
+            #window['-FIND NUMBER-'].update('')
+            #window['-FIND-'].update('')
+            #window['-FIND RE-'].update('')
+        # elif event == '-FOCUS FIND-':
+        #     window['-FIND-'].set_focus()
         elif event == '-FOCUS FILTER-':
             window['-FILTER-'].set_focus()
-        elif event == '-FOCUS RE FIND-':
-            window['-FIND RE-'].set_focus()
-        elif event == '-FIND-' or event == '-FIRST MATCH ONLY-' or event == '-VERBOSE-' or event == '-FIND RE-':
+        # elif event == '-FOCUS RE FIND-':
+        #     window['-FIND RE-'].set_focus()
+        elif event == '-FIRST MATCH ONLY-' or event == '-VERBOSE-':# or event == '-FIND RE-':event == '-FIND-' or
             is_ignore_case = values['-IGNORE CASE-']
             old_ignore_case = False
             current_typed_value = str(values['-FIND-'])
@@ -654,25 +655,25 @@ def main():
                 window['-DEMO LIST-'].update(sorted(file_list))
                 window['-FIND NUMBER-'].update(f'{len(file_list)} files')
                 window['-FILTER NUMBER-'].update('')
-                window['-FIND RE-'].update('')
+                #window['-FIND RE-'].update('')
                 window['-FILTER-'].update('')
-            elif values['-FIND RE-']:
-                window['-ML-'].update('')
-                file_list = find_in_file(values['-FIND RE-'], get_file_list_dict(), regex=True, verbose=values['-VERBOSE-'],window=window)
-                window['-DEMO LIST-'].update(sorted(file_list))
-                window['-FIND NUMBER-'].update(f'{len(file_list)} files')
-                window['-FILTER NUMBER-'].update('')
-                window['-FIND-'].update('')
-                window['-FILTER-'].update('')
-        elif event == 'Find RE':
-            window['-ML-'].update('')
-            file_list = find_in_file(values['-FIND RE-'], get_file_list_dict(), regex=True, verbose=values['-VERBOSE-'],window=window)
-            window['-DEMO LIST-'].update(sorted(file_list))
-            window['-FIND NUMBER-'].update(f'{len(file_list)} files')
-            window['-FILTER NUMBER-'].update('')
-            window['-FIND-'].update('')
-            window['-FILTER-'].update('')
-            sg.cprint('Regular expression find completed')
+            # elif values['-FIND RE-']:
+            #     window['-ML-'].update('')
+            #     file_list = find_in_file(values['-FIND RE-'], get_file_list_dict(), regex=True, verbose=values['-VERBOSE-'],window=window)
+            #     window['-DEMO LIST-'].update(sorted(file_list))
+            #     window['-FIND NUMBER-'].update(f'{len(file_list)} files')
+            #     window['-FILTER NUMBER-'].update('')
+            #     window['-FIND-'].update('')
+            #     window['-FILTER-'].update('')
+        # elif event == 'Find RE':
+        #     window['-ML-'].update('')
+        #     file_list = find_in_file(values['-FIND RE-'], get_file_list_dict(), regex=True, verbose=values['-VERBOSE-'],window=window)
+        #     window['-DEMO LIST-'].update(sorted(file_list))
+        #     window['-FIND NUMBER-'].update(f'{len(file_list)} files')
+        #     window['-FILTER NUMBER-'].update('')
+        #     window['-FIND-'].update('')
+        #     window['-FILTER-'].update('')
+        #     sg.cprint('Regular expression find completed')
         elif event == 'Settings':
             if settings_window() is True:
                 window.close()
@@ -684,21 +685,21 @@ def main():
             file_list = get_file_list()
             window['-FILTER-'].update('')
             window['-FILTER NUMBER-'].update(f'{len(file_list)} files')
-            window['-FIND-'].update('')
+            #window['-FIND-'].update('')
             window['-DEMO LIST-'].update(file_list)
-            window['-FIND NUMBER-'].update('')
-            window['-FIND RE-'].update('')
+            #window['-FIND NUMBER-'].update('')
+            #window['-FIND RE-'].update('')
             window['-ML-'].update('')
         elif event == '-FOLDERNAME-':
             sg.user_settings_set_entry('-demos folder-', values['-FOLDERNAME-'])
             file_list_dict = get_file_list_dict()
             file_list = get_file_list()
-            window['-DEMO LIST-'].update(values=file_list)
+            #window['-DEMO LIST-'].update(values=file_list)
             window['-FILTER NUMBER-'].update(f'{len(file_list)} files')
             window['-ML-'].update('')
-            window['-FIND NUMBER-'].update('')
-            window['-FIND-'].update('')
-            window['-FIND RE-'].update('')
+            #window['-FIND NUMBER-'].update('')
+            #window['-FIND-'].update('')
+            #window['-FIND RE-'].update('')
             window['-FILTER-'].update('')
         elif event == 'Open Folder':
             explorer_program = get_explorer()
@@ -731,15 +732,11 @@ def main():
             window['-DEMO LIST-'].update(values=file_list)
             window['-FILTER NUMBER-'].update(f'{len(file_list)} files')
             window['-ML-'].update('')
-            window['-FIND NUMBER-'].update('')
-            window['-FIND-'].update('')
-            window['-FIND RE-'].update('')
+            #window['-FIND NUMBER-'].update('')
+            #window['-FIND-'].update('')
+            #window['-FIND RE-'].update('')
             window['-FILTER-'].update('')
     window.close()
-
-
-
-
 
 
 if __name__ == '__main__':
