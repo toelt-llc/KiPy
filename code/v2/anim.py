@@ -1,4 +1,5 @@
 import os
+from turtle import color
 from csv_load import *
 from matplotlib import pyplot as plt
 from matplotlib import animation
@@ -41,7 +42,7 @@ def animate_gaze_single(trial, speed:int=1, plot=True, save=True, filename='anim
 
     def anim(i):
         i = i*speed
-        try: ax2.title.set_text(trial.kinematics['frame_s'][i])
+        try: ax2.title.set_text(f"{trial.kinematics['frame_s'][i]} s")
         except: print("",end="")
         line[0].set_data(x[:i],y[:i])
         try: line[1].set_data(bx[:i],by[:i])
@@ -61,6 +62,67 @@ def animate_gaze_single(trial, speed:int=1, plot=True, save=True, filename='anim
     ani = animation.FuncAnimation(fig, anim, init_func=init, interval=1, blit=False, repeat=False, save_count=trial.count/speed)
     if save:
         path = './animations/' + filename + '.mp4'
+        if not os.path.isfile(path): ani.save(path, fps=100, progress_callback=save_cb)
+        else: print("File already exists.")
+    if plot: plt.show()
+
+def animate_gaze_double(trial, speed:int=1, plot=True, save=True, filename='animation_double'):
+    """ Function to create a video for a double frame animation, similar to animate_gaze_single.
+        1: gaze position 2: gaze position + history. Support for ball on bar too. 
+    """
+    x = trial.kinematics['gaze_x']
+    y = trial.kinematics['gaze_y']
+    b=0
+    try: 
+        bx = trial.kinematics['ball_x']
+        by = trial.kinematics['ball_y']
+        b=1
+    except: print("no ball data",end="")
+
+    def init():
+        line[0].set_data([],[])
+        line[1].set_data([],[])
+        try: 
+            line[2].set_data([],[])     #ball line
+            line[3].set_data([],[])     #ball line
+        except: print("",end="")
+        return line, 
+
+    def anim(i):
+        i = i*speed
+        try : 
+            line[0].set_data([x[i], x[i+10]], [y[i], y[i+10]])
+            ax1.title.set_text(("Time (s): " + str(round(trial.kinematics['frame_s'][i],4))))
+            ax2.title.set_text(("Frame : " + str(trial.kinematics['frame'][i])))
+        except: print("",end="")
+        line[2].set_data(x[:i][::10],y[:i][::10])
+        try:    
+            line[1].set_data([bx[i], bx[i+10]], [by[i], by[i+10]])
+            line[3].set_data(bx[:i][::10],by[:i][::10])
+        except: print("",end="")
+        return line
+
+    fig, (ax1, ax2) = plt.subplots(1,2, figsize=(16,8))
+    fig.suptitle((f"Gaze only, speed:  x{str(speed)} \n {trial.name}"))
+    ax1.set_ylabel('Gaze Y position (m)')
+    ax1.set_xlabel('Gaze X position (m)'), ax2.set_xlabel('Gaze X position (m)')
+    line0, = ax1.plot([], [], "+", lw=5, label = 'gaze')
+    line1, = ax1.plot([], [])
+    line2, = ax2.plot([], [], lw=2, label = 'gaze', color='lightblue')
+    line3, = ax2.plot([], [])
+    if b == 1: 
+        line1, = ax1.plot([], [], "o", lw=5, label = 'ball')
+        line3, = ax2.plot([], [], lw=2, label = 'ball')
+    line = [line0, line1, line2, line3]
+    for ax in [ax1, ax2]:
+        ax.set_xlim(-0.4,0.4)
+        ax.set_ylim(0,1)
+
+    plt.legend(title = 'Positions')
+    plt.tight_layout()
+    ani = animation.FuncAnimation(fig, anim, init_func=init, interval=1, blit=False, repeat=False, save_count=trial.count/speed)
+    if save:
+        path = filename + '.mp4'
         if not os.path.isfile(path): ani.save(path, fps=100, progress_callback=save_cb)
         else: print("File already exists.")
     if plot: plt.show()
@@ -127,7 +189,7 @@ def animate_gaze_triple(trial, speed:int=1, plot=True, save=True, filename='anim
     plt.tight_layout()
     ani = animation.FuncAnimation(fig, anim, init_func=init, interval=1, blit=False, repeat=False, save_count=trial.count/speed)
     if save:
-        path = './animations/' + filename + '.mp4'
+        path = filename + '.mp4'
         if not os.path.isfile(path): ani.save(path, fps=100, progress_callback=save_cb)
         else: print("File already exists.")
     if plot: plt.show()
@@ -366,7 +428,8 @@ def armspeed(trial, plot=True, save=True, filename='arms_speed'):
     """
     plt.plot(trial.kinematics['frame_s'], trial.kinematics['right_spd'], label='right arm')
     plt.plot(trial.kinematics['frame_s'], trial.kinematics['left_spd'], label='left arm')
-    plt.title('Arms speed trial {}'.format(trial.name))
+    plt.suptitle('Arms speed')
+    plt.title(trial.name, fontsize=10)
     plt.xlabel("Time (s)")
     plt.ylabel("Hand speed (m/s)")
     plt.legend()

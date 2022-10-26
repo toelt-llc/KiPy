@@ -1,3 +1,4 @@
+import tabulate
 import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
@@ -80,9 +81,9 @@ class Events:
         #self.counts['other'] = event_list.count('')
         df_event = df[df['Event name'].notna()]
         # Returns tuple with the Frame# and time at which start OR end happens, order is always start->end
-        self.saccades =  [tuple(x) for x in df_event.loc[((df_event['Event name'] == 'Gaze saccade start') | (df_event['Event name'] == 'Gaze saccade end'))][['Frame #','Event time (s)']].values]
-        self.fixations = [tuple(x) for x in df_event.loc[((df_event['Event name'] == 'Gaze fixation start') | (df_event['Event name'] == 'Gaze fixation end'))][['Frame #','Event time (s)']].values]
-        self.blinks =    [tuple(x) for x in df_event.loc[((df_event['Event name'] == 'Gaze blink start') | (df_event['Event name'] == 'Gaze blink end'))][['Frame #','Event time (s)']].values]
+        self.saccades =  [(x) for x in df_event.loc[((df_event['Event name'] == 'Gaze saccade start') | (df_event['Event name'] == 'Gaze saccade end'))][['Event time (s)']].values]
+        self.fixations = [(x) for x in df_event.loc[((df_event['Event name'] == 'Gaze fixation start') | (df_event['Event name'] == 'Gaze fixation end'))][['Event time (s)']].values]
+        self.blinks =    [(x) for x in df_event.loc[((df_event['Event name'] == 'Gaze blink start') | (df_event['Event name'] == 'Gaze blink end'))][['Event time (s)']].values]
 
 
 class Kinematics:
@@ -142,7 +143,7 @@ def stat(series):
     lst = []
     if len(series) > 0: # avoids 0 divisions
         for i in range(0, len(series)-1, 2):
-            lst.append(series[i+1][1] - series[i][1])   # 0: duration in frames, 1: duration in seconds
+            lst.append(series[i+1] - series[i])   # 0: duration in frames, 1: duration in seconds
         arr = np.array(lst)
 
         return round(np.mean(arr),2), round(np.std(arr),2) 
@@ -167,3 +168,18 @@ def medfilt(df, f):
 def path_replace(path):
     output  = path.replace('/', '\\')
     return output
+
+def event_table(trial):
+    n_sac = np.array(trial.events['saccades']) # contains start and end
+    l_sac = n_sac[1::2] - n_sac[::2]           # list of durations
+    n_fix = np.array(trial.events['fixations'])
+    l_fix = n_fix[1::2] - n_fix[::2] 
+    n_blk = np.array(trial.events['blinks'])
+    l_blk = n_blk[1::2] - n_blk[::2] 
+    tab = pd.DataFrame({'Count': [len(l_sac), len(l_fix), len(l_blk)],
+                        'Mean duration (s)': [l_sac.mean(), l_fix.mean(), l_blk.mean()]}, 
+                        index=['Saccad', 'Fixats', 'Blinks'])
+    print("Events table: \n", tabulate.tabulate(tab, headers='keys', tablefmt='psql', showindex=True), sep="")
+
+if __name__ == '__main__':
+    print("This file should not be run individually.")
