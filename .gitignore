@@ -5,6 +5,7 @@ docs/*/*.pptx
 *.csv
 !files/utf8/Visually_Guided_Reaching*11_49.csv
 !files/utf8_2/Visually_Guided_Reaching*LEFT*.csv
+!code/v2/testfiles/Visually_Guided_Reaching_-_Child__4_target_-_LEFT_-_10_06.csv
 
 *.mp4
 !code/animations/Ball*.mp4

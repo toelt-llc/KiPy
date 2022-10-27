@@ -1,12 +1,17 @@
 #!/usr/bin/env python3
 import time, anim, sys
+from pathlib2 import Path
 from csv_load import *
 
 description = """
 """
 
-input_file = '../../files/utf8_2/Ball_on_Bar_-_Child_-_RIGHT_-_10_21.csv'
+INPUT = 'Ball_on_Bar_-_Child_-_RIGHT_-_10_21.csv'
 
+data_folder = Path("testfiles")
+input_file = data_folder / INPUT
+print(input_file.name)
+input_file = str(input_file)
 
 if len(sys.argv) == 1:
     input_file = input_file
