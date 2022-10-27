@@ -4,15 +4,16 @@ from pathlib2 import Path
 from csv_load import *
 
 description = """
-pip install -r requirements.txt
+Main script for running animations from csv files.
+Change INPUT to the desired input file name.  
+To install the required libraries do : 
+    python -m pip install -r requirements.txt
 """
 
-INPUT = 'Ball_on_Bar_-_Child_-_RIGHT_-_10_21.csv'
+INPUT = 'Visually_Guided_Reaching_-_Child__4_target_-_LEFT_-_10_06.csv'
 
 data_folder = Path("testfiles")
-input_file = data_folder / INPUT
-print(input_file.name)
-input_file = str(input_file)
+input_file = str(data_folder / INPUT)
 
 if len(sys.argv) == 1:
     input_file = input_file
@@ -27,21 +28,22 @@ def main():
         print(f"Processing trial {i+1} of {len(dataframes)}.")
         print(20*'=')
 
-        trial = Trial(dataframes[i], name = input_file + str(i), filter = None)      
+        trial = Trial(dataframes[i], name = input_file[:-4] + "_T" + str(i), filter = None)  
         print(f"This trial duration is {trial.duration} seconds.")
         event_table(trial)
         
         # Plot of right hand v. left hand over time.
         anim.armspeed(trial, save=False, filename = trial.name)
-        anim.animate_gaze_double(trial, save=False, speed=20, filename=trial.name)                                       
-        # # Create a video animation from the gaze data. 
-        #anim.animate_gaze_single(trial, plot=False, save=True, speed=40, filename=trial.name)  
-        # # Create a triple animation, similar to the gaze triple and includes hands positions. 
+        # Other plots
+        anim.animate_gaze_double(trial, save=False, speed=20, filename=trial.name)                        
         # anim.animate_all(trial, plot=True, save=False, speed=10, filename=trial.name)
         
-
-    print("Process finished -- %s seconds --" % round((time.time() - start_time),2))
+    print("Process finished in %s seconds." % round((time.time() - start_time),2))
 
 if __name__ == "__main__":
-    print(f"Reading file: {input_file}")
-    main()
+    print(f"\nReading file: {input_file}", sep="")
+    try: 
+        main()
+    except FileNotFoundError:
+        print("Please enter a valid filename located in tesfiles folder")
+        print(description)

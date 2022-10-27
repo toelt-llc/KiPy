@@ -10,7 +10,7 @@ docs/*/*.pptx
 *.mp4
 !code/animations/Ball*.mp4
 !code/animations/newfilter/*
-!code/v2/animation_example.mp4
+!code/v2/testfiles/*.mp4
 
 */__pycache__
 */*/__pycache__
@@ -21,5 +21,6 @@ code/v1.1/test-gui
 
 code/v1.1
 code/v2/Gaze-parameters.xlsx
+code/v2/nb0_preprocessing.ipynb
 
 .vscode/settings.json
