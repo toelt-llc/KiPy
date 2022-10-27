@@ -1,0 +1,7 @@
+blosc
+pandas
+pathlib2
+matplotlib
+numpy
+scipy
+tabulate

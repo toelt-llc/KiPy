@@ -4,6 +4,7 @@ from pathlib2 import Path
 from csv_load import *
 
 description = """
+pip install -r requirements.txt
 """
 
 INPUT = 'Ball_on_Bar_-_Child_-_RIGHT_-_10_21.csv'
