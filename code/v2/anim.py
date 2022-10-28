@@ -24,12 +24,12 @@ def animate_gaze_double(trial, speed:int=1, plot=True, save=True, filename='anim
     ry = trial.kinematics['right_y']    # l4,l5
     lx = trial.kinematics['left_x']     # l6,l7
     ly = trial.kinematics['left_y']     # l6,l7
-    b=0
+    b=False
     try: 
         bx = trial.kinematics['ball_x'] # l2,l3
         by = trial.kinematics['ball_y'] # l2,l3
-        b=1
-    except: None#print("no ball data",end="")
+        b=True
+    except: print("No ball data for this task.")#,end="")
 
     def anim(i):
         i = i*speed
@@ -43,15 +43,19 @@ def animate_gaze_double(trial, speed:int=1, plot=True, save=True, filename='anim
         line[2].set_data(x[:i][::10],y[:i][::10])
         line[5].set_data(rx[:i][::10],ry[:i][::10])
         line[7].set_data(lx[:i][::10],ly[:i][::10])
-        try:    
+        if b:   
             line[1].set_data([bx[i], bx[i+10]], [by[i], by[i+10]])
             line[3].set_data(bx[:i][::10],by[:i][::10])
-            #if not np.isnan(x[i]):
-            #    ax1.text(0.5, 0.5, f"Gaze-ball distance={np.linalg.norm(np.array([x[i], y[i]]) - np.array([bx[i], by[i]]))}")
-        except: print("",end="")
+            global distx_b
+            distx_b = []
+            if not np.isnan(x[i]):
+                dist = np.linalg.norm(np.array([x[i], y[i]]) - np.array([bx[i], by[i]]))
+                distx_b.append(dist)
+                print(f"Gaze-ball distance={dist}")
+
         return line
 
-    fig, (ax1, ax2) = plt.subplots(1,2, figsize=(16,8))
+    fig, (ax1, ax2) = plt.subplots(1,2, figsize=(14,7))
     fig.suptitle((f"Gaze only, speed:  x{str(speed)} \n {trial.name}"))
     ax1.set_ylabel('Gaze Y position (m)')
     ax1.set_xlabel('Gaze X position (m)'), ax2.set_xlabel('Gaze X position (m)')
@@ -64,7 +68,7 @@ def animate_gaze_double(trial, speed:int=1, plot=True, save=True, filename='anim
     line6, = ax1.plot([], [], color='red', label = 'left')
     line7, = ax2.plot([], [], color='red', label = 'left')
 
-    if b == 1: 
+    if b: 
         line1, = ax1.plot([], [], "o", lw=5, label = 'ball')
         line3, = ax2.plot([], [], lw=2, label = 'ball')
     line = [line0, line1, line2, line3, line4, line5, line6, line7]
