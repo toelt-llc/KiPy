@@ -169,17 +169,26 @@ def path_replace(path):
     output  = path.replace('/', '\\')
     return output
 
-def event_table(trial):
-    n_sac = np.array(trial.events['saccades']) # contains start and end
-    l_sac = n_sac[1::2] - n_sac[::2]           # list of durations
-    n_fix = np.array(trial.events['fixations'])
-    l_fix = n_fix[1::2] - n_fix[::2] 
-    n_blk = np.array(trial.events['blinks'])
-    l_blk = n_blk[1::2] - n_blk[::2] 
-    tab = pd.DataFrame({'Count': [len(l_sac), len(l_fix), len(l_blk)],
-                        'Mean duration (s)': [l_sac.mean(), l_fix.mean(), l_blk.mean()]}, 
-                        index=['Saccad', 'Fixats', 'Blinks'])
-    print("Events table: \n", tabulate.tabulate(tab, headers='keys', tablefmt='psql', showindex=True), sep="")
+def event_table(name, trial, i, df): # will need filename for the row name
+
+    sacs = np.array(trial.events['saccades']) # contains start and end
+    lsac = sacs[1::2] - sacs[::2]           # list of durations for saccades
+    fixs = np.array(trial.events['fixations'])
+    lfix = fixs[1::2] - fixs[::2] 
+    blks = np.array(trial.events['blinks'])
+    try: lblk = blks[1::2] - blks[::2] 
+    except: lblk = 'error'
+    values = []
+    try : values.extend([len(sacs), lsac.mean(), lsac.std(), len(fixs), lfix.mean(), lfix.std(), len(blks), blks.mean(), blks.std()])   
+    except: values.extend([len(sacs), lsac.mean(), lsac.std(), len(fixs), lfix.mean(), lfix.std(), 'err', 'err', 'err'])
+
+    vals = {}
+    for j, col in enumerate(df.columns):
+        vals[col] = values[j]
+    row = pd.Series(vals, name=f"{name}, trial {i+1}")
+    df = df.append(row)
+
+    return df
 
 if __name__ == '__main__':
     print("This file should not be run individually.")

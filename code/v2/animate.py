@@ -11,9 +11,13 @@ To install the required libraries do :
 """
 
 INPUT = 'Visually_Guided_Reaching_-_Child__4_target_-_LEFT_-_10_06.csv'
+CHILD_NAME = 'child0'
 
 data_folder = Path("testfiles")
 input_file = str(data_folder / INPUT)
+columns_recap = ['Saccades N', 'Saccades Mean (s)', 'Saccades Std (s)', 
+                 'Fixations', 'Fixations Mean (s)', 'Fixations Std (s)', 
+                 'Blinks', 'Blinks Mean (s)', 'Blinks Std (s)']
 
 if len(sys.argv) == 1:
     input_file = input_file
@@ -24,23 +28,26 @@ def main():
     start_time = time.time()
 
     dataframes = extract_dataframes(input_file)
+    df = pd.DataFrame(columns=columns_recap) 
     for i in range(len(dataframes)):                                     
         print(f"Processing trial {i+1} of {len(dataframes)}.")
         print(20*'=')
 
         trial = Trial(dataframes[i], name = input_file[:-4] + "_T" + str(i), filter = None)  
         print(f"This trial duration is {trial.duration} seconds.")
-        event_table(trial)
+        df = event_table(CHILD_NAME, trial, i, df)
         
         # Plot of right hand v. left hand over time.
         anim.armspeed(trial, save=False, filename = trial.name)
         # Other plots
-        anim.animate_gaze_double(trial, save=False, speed=20, filename=trial.name)                        
+        #anim.animate_gaze_double(trial, save=False, speed=20, filename=trial.name)                        
         # anim.animate_all(trial, plot=True, save=False, speed=10, filename=trial.name)
-        
+    
+    print("df: \n", tabulate.tabulate(df, headers='keys', tablefmt='fancy_outline', showindex=True), sep="")         
+    df.to_csv(f"results_{CHILD_NAME}.csv")
     print("Process finished in %s seconds." % round((time.time() - start_time),2))
-
-if __name__ == "__main__":
+    
+if __name__ == "__main__":  
     print(f"\nReading file: {input_file}", sep="")
     try: 
         main()
