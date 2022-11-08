@@ -2,7 +2,7 @@ import os
 from csv_load import *
 from matplotlib import pyplot as plt
 from matplotlib import animation
-from scipy.ndimage import median_filter
+from scipy.spatial import distance
 #from alive_progress import alive_bar
 
 # Module containing the animations methods
@@ -31,8 +31,8 @@ def animate_gaze_double(trial, speed:int=1, plot=True, save=True, filename='anim
         b=True
     except: print("No ball data for this task.")#,end="")
 
-    def anim(i):
-        i = i*speed
+    def anim(j):
+        i = j*speed
         try : 
             line[0].set_data([x[i], x[i+10]], [y[i], y[i+10]])
             line[4].set_data([rx[i], rx[i+10]], [ry[i], ry[i+10]])
@@ -43,15 +43,19 @@ def animate_gaze_double(trial, speed:int=1, plot=True, save=True, filename='anim
         line[2].set_data(x[:i][::10],y[:i][::10])
         line[5].set_data(rx[:i][::10],ry[:i][::10])
         line[7].set_data(lx[:i][::10],ly[:i][::10])
-        if b:   
+        if b and i<len(by)+10:   
             line[1].set_data([bx[i], bx[i+10]], [by[i], by[i+10]])
             line[3].set_data(bx[:i][::10],by[:i][::10])
             global distx_b
             distx_b = []
-            if not np.isnan(x[i]):
-                dist = np.linalg.norm(np.array([x[i], y[i]]) - np.array([bx[i], by[i]]))
+            if not np.isnan(x[j]):
+                #dist1 = np.linalg.norm(np.array([x[i], y[i]]) - np.array([bx[i], by[i]]))
+                dist = distance.euclidean(np.array([x[j], y[j]]), np.array([bx[j], by[j]]))
                 distx_b.append(dist)
-                print(f"Gaze-ball distance={dist}")
+                #print(f"Gaze-ball distance={dist}")
+            if j%500==0: 
+                #print(len(distx_b))
+                print(f"Gaze-ball distance last 500 points = {round(np.mean(distx_b[-500:j]),3)} (m)")
 
         return line
 

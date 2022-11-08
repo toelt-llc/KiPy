@@ -1,8 +1,9 @@
-import tabulate
+import warnings
 import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
 from matplotlib.animation import FuncAnimation
+warnings.filterwarnings(action='ignore', category=RuntimeWarning)
 
 # The Trial class forms the core of the data extraction from the CSV files. 
 # On initialisation, the Python class requires a Pandas DataFrame as input. 
@@ -164,12 +165,14 @@ def medfilt(df, f):
             arry.append(np.nanmedian(df['Gaze_Y'][i]))
     return arrx, arry
 
-# Annexe
+### Annexe start
 def path_replace(path):
     output  = path.replace('/', '\\')
     return output
 
 def event_table(name, trial, i, df): # will need filename for the row name
+    """ Reads a trial and return a pd.DataFrame with the selected columns
+    """
 
     sacs = np.array(trial.events['saccades']) # contains start and end
     lsac = sacs[1::2] - sacs[::2]           # list of durations for saccades
@@ -179,7 +182,7 @@ def event_table(name, trial, i, df): # will need filename for the row name
     try: lblk = blks[1::2] - blks[::2] 
     except: lblk = 'error'
     values = []
-    try : values.extend([len(sacs), lsac.mean(), lsac.std(), len(fixs), lfix.mean(), lfix.std(), len(blks), blks.mean(), blks.std()])   
+    try : values.extend([len(sacs), lsac.mean(), lsac.std(), len(fixs), lfix.mean(), lfix.std(), len(blks), lblk.mean(), lblk.std()])   
     except: values.extend([len(sacs), lsac.mean(), lsac.std(), len(fixs), lfix.mean(), lfix.std(), 'err', 'err', 'err'])
 
     vals = {}
@@ -189,6 +192,27 @@ def event_table(name, trial, i, df): # will need filename for the row name
     df = df.append(row)
 
     return df
+
+def switch(filename):
+    """ Simple function to identify and rename trial
+    """
+    left = 'left'
+    right = 'right'
+    filename = filename.lower()
+    if 'visually' in filename:
+        if right in filename: return(f"Visually_Guided_{right.upper()}")
+        else: return(f"Visually_Guided_{left.upper()}")
+    elif 'ball' in filename:
+        if right in filename: return(f"Ball_on_Bar_{right.upper()}")
+        else: return(f"Ball_on_Bar_{left.upper()}")
+    elif 'object' in filename:
+        if right in filename: return(f"Object_Hit_{right.upper()}")
+        else: return(f"Object_Hit_{left}.upper()")
+    elif 'circuit' in filename:
+        if right in filename: return(f"Circuit_{right.upper()}")
+        else: return(f"Circuit_{left.upper()}")
+
+### Annexe end
 
 if __name__ == '__main__':
     print("This file should not be run individually.")
