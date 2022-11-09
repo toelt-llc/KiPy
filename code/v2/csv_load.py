@@ -2,6 +2,7 @@ import warnings
 import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
+from scipy.spatial import distance
 from matplotlib.animation import FuncAnimation
 warnings.filterwarnings(action='ignore', category=RuntimeWarning)
 
@@ -105,10 +106,21 @@ class Kinematics:
         self.values['left_spd'] = list(df['Left: Hand speed'])
         self.values['frame'] = list(df['Frame #'])
         self.values['frame_s'] = [round(val,1) for val in list(df['Frame time (s)'])]
-        try: 
+        # if ball-on-bar task
+        if 'x_ball_pos' in df: 
             self.values['ball_x'] = list(df['x_ball_pos'])
             self.values['ball_y'] = list(df['y_ball_pos'])
-        except: print('',end='')
+            # gaze-ball distance
+            ball = np.array([(i,j) for i, j in zip(self.values['ball_x'], self.values['ball_y'])])
+            if filter is None:
+                gaze = np.array([(i,j) for i, j in zip(self.values['gaze_x'], self.values['gaze_y'])])
+                self.values['ball_dist'] = [np.linalg.norm(gaze[i]-ball[i]) for i in range(len(ball))]
+            else:
+                fgaze = np.array([(i,j) for i, j in zip(self.values['filtered_x'], self.values['filtered_y'])])
+                self.values['ball_dist'] = [np.linalg.norm(fgaze[i]-ball[i]) for i in range(len(ball))]
+
+        #self.values['dist_ball'] = distance.euclidean(np.array([self.values['gaze_x'], self.values['gaze_y']]), 
+         #                                               np.array([self.values['ball_x'], self.values['ball_y']]))
 
 
 def extract_dataframes(file, offset=0, encode='utf_8', set=1):

@@ -25,6 +25,7 @@ def animate_gaze_double(trial, speed:int=1, plot=True, save=True, filename='anim
     lx = trial.kinematics['left_x']     # l6,l7
     ly = trial.kinematics['left_y']     # l6,l7
     b=False
+    if b: distx_b = trial.kinematics['ball_dist']
     try: 
         bx = trial.kinematics['ball_x'] # l2,l3
         by = trial.kinematics['ball_y'] # l2,l3
@@ -43,19 +44,11 @@ def animate_gaze_double(trial, speed:int=1, plot=True, save=True, filename='anim
         line[2].set_data(x[:i][::10],y[:i][::10])
         line[5].set_data(rx[:i][::10],ry[:i][::10])
         line[7].set_data(lx[:i][::10],ly[:i][::10])
-        if b and i<len(by)+10:   
+        if b and i<len(by)+10 and i<len(bx)+10:   
             line[1].set_data([bx[i], bx[i+10]], [by[i], by[i+10]])
             line[3].set_data(bx[:i][::10],by[:i][::10])
-            global distx_b
-            distx_b = []
-            if not np.isnan(x[j]):
-                #dist1 = np.linalg.norm(np.array([x[i], y[i]]) - np.array([bx[i], by[i]]))
-                dist = distance.euclidean(np.array([x[j], y[j]]), np.array([bx[j], by[j]]))
-                distx_b.append(dist)
-                #print(f"Gaze-ball distance={dist}")
-            if j%500==0: 
-                #print(len(distx_b))
-                print(f"Gaze-ball distance last 500 points = {round(np.mean(distx_b[-500:j]),3)} (m)")
+            if i%1000==0: 
+                print(f"Gaze-ball distance last 1000 points = {round(np.mean(distx_b[i-500:i]),3)} (m)")
 
         return line
 
