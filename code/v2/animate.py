@@ -11,6 +11,7 @@ To install the required libraries do :
 """
 
 INPUT = 'Visually_Guided_Reaching_-_Child__4_target_-_LEFT_-_10_06.csv'
+INPUT = 'Ball_on_Bar_-_Child_-_RIGHT_-_11_59.csv'
 CHILD_NAME = 'child0'
 
 data_folder = Path("testfiles")
@@ -29,9 +30,11 @@ def main():
 
     dataframes = extract_dataframes(input_file)
     df = pd.DataFrame(columns=columns_recap) 
-    for i in range(len(dataframes)):           
-        trial = Trial(dataframes[i], name = input_file[:-4] + "_T" + str(i), filter = None)  
-        print(f"Processing trial {i+1} of {len(dataframes)}.")
+    for i in range(len(dataframes)):
+        titlename = f'{INPUT[:-4]}_T{str(i)} '        
+        trial = Trial(dataframes[i], name = titlename, filter = None)  
+        print(f"\nProcessing trial {i+1} of {len(dataframes)}.")
+        print(f"Filter: {trial.filter_size}")
         print(20*'=')
         print(f"Trial duration: {trial.duration} seconds.")
 
@@ -40,7 +43,7 @@ def main():
         # Plot of right hand v. left hand over time.
         #anim.armspeed(trial, save=False, filename = trial.name)
         # Other plots
-        anim.animate_gaze_double(trial, save=True, speed=5, filename=trial.name)                        
+        anim.animate_gaze_double(trial, save=False, speed=20, filename=trial.name)                        
         # anim.animate_all(trial, plot=True, save=False, speed=10, filename=trial.name)
     
     print("Dataframe saved: \n", tabulate.tabulate(df, headers='keys', tablefmt='fancy_outline', showindex=True), sep="")         

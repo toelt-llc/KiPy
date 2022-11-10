@@ -2,7 +2,6 @@ import os
 from csv_load import *
 from matplotlib import pyplot as plt
 from matplotlib import animation
-from scipy.spatial import distance
 #from alive_progress import alive_bar
 
 # Module containing the animations methods
@@ -24,13 +23,13 @@ def animate_gaze_double(trial, speed:int=1, plot=True, save=True, filename='anim
     ry = trial.kinematics['right_y']    # l4,l5
     lx = trial.kinematics['left_x']     # l6,l7
     ly = trial.kinematics['left_y']     # l6,l7
-    b=False
-    if b: distx_b = trial.kinematics['ball_dist']
-    try: 
+    b = False
+    if "ball_x"in trial.kinematics.keys(): 
+        b = True
+        distx_b = trial.kinematics['ball_dist']
         bx = trial.kinematics['ball_x'] # l2,l3
         by = trial.kinematics['ball_y'] # l2,l3
-        b=True
-    except: print("No ball data for this task.")#,end="")
+    #else: print("No ball data for this task.")
 
     def anim(j):
         i = j*speed
@@ -38,14 +37,16 @@ def animate_gaze_double(trial, speed:int=1, plot=True, save=True, filename='anim
             line[0].set_data([x[i], x[i+10]], [y[i], y[i+10]])
             line[4].set_data([rx[i], rx[i+10]], [ry[i], ry[i+10]])
             line[6].set_data([lx[i], lx[i+10]], [ly[i], ly[i+10]])
-            ax1.title.set_text(("Time (s): " + str(round(trial.kinematics['frame_s'][i],4))))
-            ax2.title.set_text(("Frame : " + str(trial.kinematics['frame'][i])))
+            ax1.title.set_text(("Time (s): " + str(round(trial.kinematics['frame_s'][i],4)) + 
+                                " Frame : " + str(trial.kinematics['frame'][i])))
+            ax2.title.set_text(f'Position history')
         except: print("",end="")
         line[2].set_data(x[:i][::10],y[:i][::10])
         line[5].set_data(rx[:i][::10],ry[:i][::10])
         line[7].set_data(lx[:i][::10],ly[:i][::10])
-        if b and i<len(by)+10 and i<len(bx)+10:   
-            line[1].set_data([bx[i], bx[i+10]], [by[i], by[i+10]])
+        if b and i<len(by)-10 and i<len(bx)-10:   
+            try: line[1].set_data([bx[i], bx[i+10]], [by[i], by[i+10]])
+            except IndexError: print(f"Indexerror, i = {i}. {len(bx)}, {len(by)}")
             line[3].set_data(bx[:i][::10],by[:i][::10])
             if i%1000==0: 
                 print(f"Gaze-ball distance last 1000 points = {round(np.mean(distx_b[i-500:i]),3)} (m)")
@@ -53,7 +54,7 @@ def animate_gaze_double(trial, speed:int=1, plot=True, save=True, filename='anim
         return line
 
     fig, (ax1, ax2) = plt.subplots(1,2, figsize=(14,7))
-    fig.suptitle((f"Gaze only, speed:  x{str(speed)} \n {trial.name}"))
+    fig.suptitle((f"Gaze and hands, speed:  x{str(speed)} \n {trial.name} {round(trial.duration,1)}"))
     ax1.set_ylabel('Gaze Y position (m)')
     ax1.set_xlabel('Gaze X position (m)'), ax2.set_xlabel('Gaze X position (m)')
     line0, = ax1.plot([], [], "+", lw=5, label = 'gaze')
