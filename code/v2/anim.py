@@ -48,10 +48,13 @@ def animate_gaze_double(trial, speed:int=1, plot=True, save=True, filename='anim
             try: line[1].set_data([bx[i], bx[i+10]], [by[i], by[i+10]])
             except IndexError: print(f"Indexerror, i = {i}. {len(bx)}, {len(by)}")
             line[3].set_data(bx[:i][::10],by[:i][::10])
+            dist_arr = []
             if i%1000==0: 
-                print(f"Gaze-ball distance last 1000 points = {round(np.mean(distx_b[i-500:i]),3)} (m)")
+                dist_arr.append(round(np.mean(distx_b[i-500:i]),3))
+                print(f"Gaze-ball distance points {i-1000} to {i} = {round(np.mean(distx_b[i-500:i]),3)} (m)")
 
-        return line
+        #print(dist_arr[2:])
+        return line, dist_arr[2:]
 
     fig, (ax1, ax2) = plt.subplots(1,2, figsize=(14,7))
     fig.suptitle((f"Gaze and hands, speed:  x{str(speed)} \n {trial.name} {round(trial.duration,1)}"))

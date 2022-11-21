@@ -46,8 +46,9 @@ def main():
         anim.animate_gaze_double(trial, save=False, speed=20, filename=trial.name)                        
         # anim.animate_all(trial, plot=True, save=False, speed=10, filename=trial.name)
     
-    print("Dataframe saved: \n", tabulate.tabulate(df, headers='keys', tablefmt='fancy_outline', showindex=True), sep="")         
-    df.to_csv(f"{CHILD_NAME}_{switch(INPUT)}.csv")
+    filename = f"{CHILD_NAME}_{switch(INPUT)}.csv"
+    print(f"Dataframe saved in {filename}: \n", tabulate.tabulate(df, headers='keys', tablefmt='fancy_outline', showindex=True), sep="")         
+    df.to_csv(filename)
     print("Process finished in %s seconds." % round((time.time() - start_time),2))
     
 if __name__ == "__main__":  
